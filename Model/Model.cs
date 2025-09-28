@@ -2,7 +2,7 @@
 {
     public class Labubu
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public int Rarity { get; set; }
@@ -11,7 +11,7 @@
 
         public Labubu(int  id, string name, string color, int rarity, int size)
         {
-            ID = id;
+            Id = id;
             Name = name;
             Color = color;
             Rarity = rarity;
