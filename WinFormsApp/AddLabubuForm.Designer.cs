@@ -1,0 +1,168 @@
+﻿namespace WinFormsApp
+{
+    partial class AddLabubuForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            label1 = new Label();
+            textName = new Label();
+            textColor = new Label();
+            textRarity = new Label();
+            textSize = new Label();
+            txtName = new TextBox();
+            txtColor = new TextBox();
+            btnAdd = new Button();
+            cmbSizes = new ComboBox();
+            cmbRarity = new ComboBox();
+            SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 15F);
+            label1.Location = new Point(103, 80);
+            label1.Name = "label1";
+            label1.Size = new Size(196, 28);
+            label1.TabIndex = 0;
+            label1.Text = "Добавление лабубу";
+            // 
+            // textName
+            // 
+            textName.AutoSize = true;
+            textName.Font = new Font("Segoe UI", 12F);
+            textName.Location = new Point(53, 154);
+            textName.Name = "textName";
+            textName.Size = new Size(41, 21);
+            textName.TabIndex = 1;
+            textName.Text = "Имя";
+            // 
+            // textColor
+            // 
+            textColor.AutoSize = true;
+            textColor.Font = new Font("Segoe UI", 12F);
+            textColor.Location = new Point(53, 183);
+            textColor.Name = "textColor";
+            textColor.Size = new Size(45, 21);
+            textColor.TabIndex = 2;
+            textColor.Text = "Цвет";
+            // 
+            // textRarity
+            // 
+            textRarity.AutoSize = true;
+            textRarity.Font = new Font("Segoe UI", 12F);
+            textRarity.Location = new Point(53, 212);
+            textRarity.Name = "textRarity";
+            textRarity.Size = new Size(75, 21);
+            textRarity.TabIndex = 3;
+            textRarity.Text = "Редкость";
+            // 
+            // textSize
+            // 
+            textSize.AutoSize = true;
+            textSize.Font = new Font("Segoe UI", 12F);
+            textSize.Location = new Point(53, 241);
+            textSize.Name = "textSize";
+            textSize.Size = new Size(62, 21);
+            textSize.TabIndex = 4;
+            textSize.Text = "Размер";
+            // 
+            // txtName
+            // 
+            txtName.Location = new Point(130, 152);
+            txtName.Name = "txtName";
+            txtName.Size = new Size(100, 23);
+            txtName.TabIndex = 5;
+            // 
+            // txtColor
+            // 
+            txtColor.Location = new Point(130, 181);
+            txtColor.Name = "txtColor";
+            txtColor.Size = new Size(100, 23);
+            txtColor.TabIndex = 6;
+            // 
+            // btnAdd
+            // 
+            btnAdd.Font = new Font("Segoe UI", 12F);
+            btnAdd.Location = new Point(137, 300);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(93, 34);
+            btnAdd.TabIndex = 9;
+            btnAdd.Text = "Добавить";
+            btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
+            // 
+            // cmbSizes
+            // 
+            cmbSizes.FormattingEnabled = true;
+            cmbSizes.Location = new Point(130, 239);
+            cmbSizes.Name = "cmbSizes";
+            cmbSizes.Size = new Size(100, 23);
+            cmbSizes.TabIndex = 10;
+            // 
+            // cmbRarity
+            // 
+            cmbRarity.FormattingEnabled = true;
+            cmbRarity.Location = new Point(130, 210);
+            cmbRarity.Name = "cmbRarity";
+            cmbRarity.Size = new Size(100, 23);
+            cmbRarity.TabIndex = 11;
+            // 
+            // AddLabubuForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(398, 375);
+            Controls.Add(cmbRarity);
+            Controls.Add(cmbSizes);
+            Controls.Add(btnAdd);
+            Controls.Add(txtColor);
+            Controls.Add(txtName);
+            Controls.Add(textSize);
+            Controls.Add(textRarity);
+            Controls.Add(textColor);
+            Controls.Add(textName);
+            Controls.Add(label1);
+            Name = "AddLabubuForm";
+            Text = "AddLabubuForm";
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private Label label1;
+        private Label textName;
+        private Label textColor;
+        private Label textRarity;
+        private Label textSize;
+        private TextBox txtName;
+        private TextBox txtColor;
+        private Button btnAdd;
+        private ComboBox cmbSizes;
+        private ComboBox cmbRarity;
+    }
+}

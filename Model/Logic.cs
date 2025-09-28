@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Logic
+    public class Logic
     {
         private List<Labubu> Labubus = new List<Labubu>();
 
-        public void AddLabubu(int id, string name, string color, int rarity, int size)
+        public void AddLabubu(int id, string name, string color, string rarity, string size)
         {
-            if (name == string.Empty || color == string.Empty) { throw new NotImplementedException(); }
+            if (name == string.Empty || color == string.Empty || rarity == string.Empty || size == string.Empty) { throw new NotImplementedException(); }
             else
             {
                 Labubu newLabubu = new Labubu(id, name, color, rarity, size);
@@ -51,15 +51,15 @@ namespace Model
                     labubu.Id.ToString(),
                     labubu.Name,
                     labubu.Color,
-                    labubu.Rarity.ToString(),
-                    labubu.Size.ToString()
+                    labubu.Rarity,
+                    labubu.Size
                 };
                 finallist.Add(labubulist);
             }
             return finallist;
         }
 
-        public void UpdateLabubu(int id, string newName, string newColor, int newRarity, int newSize)
+        public void UpdateLabubu(int id, string newName, string newColor, string newRarity, string newSize)
         {
             if (id == null) { throw new NotImplementedException(); }
             else
