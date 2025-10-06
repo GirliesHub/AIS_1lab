@@ -21,11 +21,13 @@ namespace WinFormsApp
             listViewLabubus.FullRowSelect = true;
             listViewLabubus.GridLines = true;
             listViewLabubus.Columns.Clear();
-            listViewLabubus.Columns.Add("Номер", 90);
-            listViewLabubus.Columns.Add("Имя", 90);
-            listViewLabubus.Columns.Add("Цвет", 90);
-            listViewLabubus.Columns.Add("Редкость", 90);
-            listViewLabubus.Columns.Add("Размер", 90);
+            listViewLabubus.Columns.Add("РќРѕРјРµСЂ", 90);
+            listViewLabubus.Columns.Add("РРјСЏ", 90);
+            listViewLabubus.Columns.Add("Р¦РІРµС‚", 90);
+            listViewLabubus.Columns.Add("Р РµРґРєРѕСЃС‚СЊ", 90);
+            listViewLabubus.Columns.Add("Р Р°Р·РјРµСЂ", 90);
+            listViewLabubus.Columns.Add("Р¦РµРЅР°", 90);
+
         }
 
         private void RefreshLabubuList()
@@ -39,6 +41,7 @@ namespace WinFormsApp
                 item.SubItems.Add(labubu[2]);
                 item.SubItems.Add(labubu[3]);
                 item.SubItems.Add(labubu[4]);
+                item.SubItems.Add(labubu[5]);
                 listViewLabubus.Items.Add(item);
             }
         }
@@ -52,7 +55,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка открытия формы: {ex.Message}");
+                MessageBox.Show($"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„РѕСЂРјС‹: {ex.Message}");
             }
         }
 
@@ -61,7 +64,7 @@ namespace WinFormsApp
             try { var SelectedIt = listViewLabubus.SelectedItems[0]; }
             catch
             {
-                MessageBox.Show("Ничего не выбрано");
+                MessageBox.Show("РќРёС‡РµРіРѕ РЅРµ РІС‹Р±СЂР°РЅРѕ");
                 return;
             }
             int SelectedNum = listViewLabubus.SelectedItems[0].Index;
@@ -77,7 +80,7 @@ namespace WinFormsApp
             }
             catch
             {
-                MessageBox.Show("Ничего не выбрано");
+                MessageBox.Show("РќРёС‡РµРіРѕ РЅРµ РІС‹Р±СЂР°РЅРѕ");
                 return;
             }
             var updateForm = new UpdateLabubuForm(logic, listViewLabubus.SelectedItems[0].Index);
@@ -90,6 +93,9 @@ namespace WinFormsApp
             RefreshLabubuList();
         }
 
+        private void listViewLabubus_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }
