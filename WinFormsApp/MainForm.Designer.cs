@@ -1,4 +1,4 @@
-﻿
+
 
 namespace WinFormsApp
 {
@@ -38,9 +38,10 @@ namespace WinFormsApp
             // 
             // btnAddLabubu
             // 
-            btnAddLabubu.Location = new Point(552, 174);
+            btnAddLabubu.Location = new Point(707, 204);
+            btnAddLabubu.Margin = new Padding(3, 4, 3, 4);
             btnAddLabubu.Name = "btnAddLabubu";
-            btnAddLabubu.Size = new Size(119, 23);
+            btnAddLabubu.Size = new Size(136, 31);
             btnAddLabubu.TabIndex = 0;
             btnAddLabubu.Text = "Добавить лабубу";
             btnAddLabubu.UseVisualStyleBackColor = true;
@@ -48,19 +49,21 @@ namespace WinFormsApp
             // 
             // btnRemoveLabubu
             // 
-            btnRemoveLabubu.Location = new Point(552, 203);
+            btnRemoveLabubu.Location = new Point(707, 261);
+            btnRemoveLabubu.Margin = new Padding(3, 4, 3, 4);
             btnRemoveLabubu.Name = "btnRemoveLabubu";
-            btnRemoveLabubu.Size = new Size(119, 23);
+            btnRemoveLabubu.Size = new Size(136, 31);
             btnRemoveLabubu.TabIndex = 1;
             btnRemoveLabubu.Text = "Удалить лабубу";
             btnRemoveLabubu.UseVisualStyleBackColor = true;
             btnRemoveLabubu.Click += btnRemoveLabubu_Click;
             // 
-            // btnUpdateLabubu
+            // btnUpdate
             // 
-            btnUpdate.Location = new Point(552, 232);
+            btnUpdate.Location = new Point(707, 316);
+            btnUpdate.Margin = new Padding(3, 4, 3, 4);
             btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(119, 23);
+            btnUpdate.Size = new Size(136, 31);
             btnUpdate.TabIndex = 2;
             btnUpdate.Text = "Изменить лабубу";
             btnUpdate.UseVisualStyleBackColor = true;
@@ -68,21 +71,24 @@ namespace WinFormsApp
             // 
             // listViewLabubus
             // 
-            listViewLabubus.Location = new Point(12, 132);
+            listViewLabubus.Location = new Point(14, 176);
+            listViewLabubus.Margin = new Padding(3, 4, 3, 4);
             listViewLabubus.Name = "listViewLabubus";
-            listViewLabubus.Size = new Size(451, 154);
+            listViewLabubus.Size = new Size(611, 204);
             listViewLabubus.TabIndex = 3;
             listViewLabubus.UseCompatibleStateImageBehavior = false;
+            listViewLabubus.SelectedIndexChanged += listViewLabubus_SelectedIndexChanged;
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(914, 600);
             Controls.Add(listViewLabubus);
             Controls.Add(btnUpdate);
             Controls.Add(btnRemoveLabubu);
             Controls.Add(btnAddLabubu);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             Text = "Мир Лабуб";
             ResumeLayout(false);
