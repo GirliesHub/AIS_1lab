@@ -1,4 +1,4 @@
-﻿using Model;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,15 +26,25 @@ namespace WinFormsApp
         {
             string newName = textName.Text;
             string newColor = textColor.Text;
-            string newRarity = cmbRarity.SelectedItem.ToString();
-            string newSize = cmbSize.SelectedItem.ToString();
-            try { logic.UpdateLabubu(id, newName, newColor, newRarity, newSize); }
+            string newRarity = cmbRarity.SelectedItem?.ToString();
+            string newSize = cmbSize.SelectedItem?.ToString();
+
+            if (!decimal.TryParse(textPrice1.Text, out decimal newPrice))
+            {
+                MessageBox.Show("Введите корректную цену!");
+                return;
+            }
+
+            try
+            {
+                logic.UpdateLabubu(id, newName, newColor, newRarity, newSize, newPrice);
+            }
             catch
             {
                 MessageBox.Show("Одно или несколько из полей пустое(ые)!");
                 return;
             }
-            MessageBox.Show("Лабубу изменена");
+            MessageBox.Show("Лабуба изменена");
             this.Close();
         }
         private void InitializeComboBoxes()
@@ -47,5 +57,9 @@ namespace WinFormsApp
             cmbSize.Items.AddRange(new string[] { "small", "medium", "big", "HUGE" });
         }
 
+        private void textPrice1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
