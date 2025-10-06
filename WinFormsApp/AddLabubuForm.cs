@@ -1,4 +1,4 @@
-﻿using Model;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,14 +25,22 @@ namespace WinFormsApp
         }
         private void btnAdd_Click(object sender, EventArgs e)
         {
-
             string name = txtName.Text;
             string color = txtColor.Text;
-            string rarity = cmbRarity.SelectedItem.ToString();
-            string size = cmbSizes.SelectedItem.ToString();
+            string rarity = cmbRarity.SelectedItem?.ToString();
+            string size = cmbSizes.SelectedItem?.ToString();
             int number = logic.GetAllLabubus().Count;
 
-            try { logic.AddLabubu(number, name, color, rarity, size); }
+            if (!decimal.TryParse(txtPrice.Text, out decimal price))
+            {
+                MessageBox.Show("Введите корректную цену!");
+                return;
+            }
+
+            try
+            {
+                logic.AddLabubu(number, name, color, rarity, size, price);
+            }
             catch
             {
                 MessageBox.Show("Одно из полей пустое!");
@@ -41,7 +49,6 @@ namespace WinFormsApp
             MessageBox.Show("Лабубу добавлена.");
             this.Close();
         }
-
         private void InitializeComboBoxes()
         {
             cmbRarity.Items.Clear();
@@ -50,6 +57,26 @@ namespace WinFormsApp
 
             cmbSizes.Items.Clear();
             cmbSizes.Items.AddRange(new string[] { "small", "medium", "big", "HUGE" });
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtPrice_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
