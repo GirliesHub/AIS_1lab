@@ -11,6 +11,16 @@ namespace Model
     {
         private List<Labubu> Labubus = new List<Labubu>();
 
+        /// <summary>
+        /// функция для добавления лабубы
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="color"></param>
+        /// <param name="rarity"></param>
+        /// <param name="size"></param>
+        /// <param name="price"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public void AddLabubu(int id, string name, string color, string rarity, string size, decimal price)
         {
             if (name == string.Empty || color == string.Empty || rarity == string.Empty || size == string.Empty) { throw new NotImplementedException(); }
@@ -20,6 +30,12 @@ namespace Model
                 Labubus.Add(newLabubu);
             }
         }
+
+        /// <summary>
+        /// функция для удаления лабубы
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="ArgumentException"></exception>
         public void RemoveLabubu(int id)
         {
             var labubuToRemove = Labubus.FirstOrDefault(l => l.Id == id);
@@ -33,6 +49,10 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// выдаст всех лабуб под чистую
+        /// </summary>
+        /// <returns></returns>
         public List<List<string>> GetAllLabubus()
         {
             List<List<string>> finallist = new List<List<string>>();
@@ -52,6 +72,16 @@ namespace Model
             return finallist;
         }
 
+        /// <summary>
+        /// функция для изменения лабубы
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="newName"></param>
+        /// <param name="newColor"></param>
+        /// <param name="newRarity"></param>
+        /// <param name="newSize"></param>
+        /// <param name="newPrice"></param>
+        /// <exception cref="ArgumentException"></exception>
         public void UpdateLabubu(int id, string newName, string newColor, string newRarity, string newSize, decimal newPrice)
         {
             var labubuToUpdate = Labubus.FirstOrDefault(l => l.Id == id);

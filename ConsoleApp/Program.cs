@@ -74,9 +74,9 @@ namespace ConsoleApp
                 string name = Console.ReadLine();
                 Console.Write("Введите цвет: ");
                 string color = Console.ReadLine();
-                Console.Write("Введите редкость: ");
+                Console.Write("Введите редкость (1-5): ");
                 string rarity = Console.ReadLine();
-                Console.Write("Введите размер: ");
+                Console.Write("Введите размер(small, medium, big, HUGE): ");
                 string size = Console.ReadLine();
                 Console.Write("Введите цену: ");
                 decimal price = decimal.Parse(Console.ReadLine());

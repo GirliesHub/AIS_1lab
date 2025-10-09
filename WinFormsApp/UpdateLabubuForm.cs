@@ -22,6 +22,11 @@ namespace WinFormsApp
             this.logic = logic;
             this.id = Id;
         }
+        /// <summary>
+        /// изменить лабубу
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             string newName = textName.Text;
@@ -47,6 +52,9 @@ namespace WinFormsApp
             MessageBox.Show("Лабуба изменена");
             this.Close();
         }
+        /// <summary>
+        /// выпадающие списки
+        /// </summary>
         private void InitializeComboBoxes()
         {
             cmbRarity.Items.Clear();

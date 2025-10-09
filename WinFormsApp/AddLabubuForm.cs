@@ -23,6 +23,11 @@ namespace WinFormsApp
             this.logic = logic;
             InitializeComboBoxes();
         }
+        /// <summary>
+        /// кнопка добавить лабубу
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string name = txtName.Text;
@@ -49,6 +54,10 @@ namespace WinFormsApp
             MessageBox.Show("Лабубу добавлена.");
             this.Close();
         }
+
+        /// <summary>
+        /// выпадающие списки
+        /// </summary>
         private void InitializeComboBoxes()
         {
             cmbRarity.Items.Clear();
@@ -59,6 +68,7 @@ namespace WinFormsApp
             cmbSizes.Items.AddRange(new string[] { "small", "medium", "big", "HUGE" });
         }
 
+        //обработчики событий 
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -78,5 +88,6 @@ namespace WinFormsApp
         {
 
         }
+
     }
 }
