@@ -10,6 +10,7 @@ namespace Model
     public class Logic
     {
         private List<Labubu> Labubus = new List<Labubu>();
+        private int nextId = 1;
 
         /// <summary>
         /// функция для добавления лабубы
@@ -21,14 +22,15 @@ namespace Model
         /// <param name="size"></param>
         /// <param name="price"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void AddLabubu(int id, string name, string color, string rarity, string size, decimal price)
+        public void AddLabubu(string name, string color, Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
         {
-            if (name == string.Empty || color == string.Empty || rarity == string.Empty || size == string.Empty) { throw new NotImplementedException(); }
-            else
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(color) || price <= 0)
             {
-                Labubu newLabubu = new Labubu(id, name, color, rarity, size, price);
-                Labubus.Add(newLabubu);
+                throw new ArgumentException("Все поля должны быть заполнены и цена должна быть положительной");
             }
+
+            Labubu newLabubu = new Labubu(nextId++, name, color, rarity, size, price);
+            Labubus.Add(newLabubu);
         }
 
         /// <summary>
@@ -63,8 +65,8 @@ namespace Model
                     labubu.Id.ToString(),
                     labubu.Name,
                     labubu.Color,
-                    labubu.Rarity,
-                    labubu.Size,
+                    labubu.Rarity.ToString(),
+                    labubu.Size.ToString(),
                     labubu.Price.ToString()
                 };
                 finallist.Add(labubulist);
@@ -82,7 +84,7 @@ namespace Model
         /// <param name="newSize"></param>
         /// <param name="newPrice"></param>
         /// <exception cref="ArgumentException"></exception>
-        public void UpdateLabubu(int id, string newName, string newColor, string newRarity, string newSize, decimal newPrice)
+        public void UpdateLabubu(int id, string newName, string newColor, Labubu.RarityEnum newRarity, Labubu.SizeEnum newSize, decimal newPrice)
         {
             var labubuToUpdate = Labubus.FirstOrDefault(l => l.Id == id);
             if (labubuToUpdate != null)
@@ -95,15 +97,13 @@ namespace Model
                 {
                     labubuToUpdate.Color = newColor;
                 }
-                if (!string.IsNullOrEmpty(newRarity))
+                labubuToUpdate.Rarity = newRarity;
+                labubuToUpdate.Size = newSize;
+
+                if (newPrice > 0)
                 {
-                    labubuToUpdate.Rarity = newRarity;
+                    labubuToUpdate.Price = newPrice;
                 }
-                if (!string.IsNullOrEmpty(newSize))
-                {
-                    labubuToUpdate.Size = newSize;
-                }
-                labubuToUpdate.Price = newPrice;
             }
             else
             {
@@ -123,9 +123,9 @@ namespace Model
             {
                 return criteria switch
                 {
-                    Labubu.GroupByCriteria.Rarity => Labubus.GroupBy(s => s.Rarity)
+                    Labubu.GroupByCriteria.Rarity => Labubus.GroupBy(s => s.Rarity.ToString())
                             .ToDictionary(g => g.Key, g => g.ToList()),
-                    Labubu.GroupByCriteria.Size => Labubus.GroupBy(c => c.Size)
+                    Labubu.GroupByCriteria.Size => Labubus.GroupBy(c => c.Size.ToString())
                             .ToDictionary(g => g.Key, g => g.ToList()),
                     _ => throw new ArgumentException("Неизвестный критерий группировки")
                 };
@@ -140,6 +140,7 @@ namespace Model
             {
                 throw new InvalidOperationException("Список лабуб пуст");
             }
+
             if (findMostExpensive)
             {
                 decimal maxPrice = Labubus.Max(l => l.Price);
