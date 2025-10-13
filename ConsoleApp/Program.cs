@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Model;
 
-namespace ConsoleApp
+namespace ConsoleApp // Добавить проверку на отр.цену, enum на редкость и размер, пофиксить id (не давать пользователю в консоли прописать номер), потестить на пустые поля
 {
     public class Program
     {
@@ -47,7 +47,7 @@ namespace ConsoleApp
                     case "6":
                         Console.Clear();
                         FindMostLeastExpensiveLabubu();
-                        break;  
+                        break;
                     case "0":
                         Console.Clear();
                         Console.WriteLine("Спасибо, что затестили Мир Лабуб! До скорого!");
@@ -67,26 +67,24 @@ namespace ConsoleApp
             /// </summary>>
             static void AddLabubu()
             {
-                Console.WriteLine("Добавление новой лабубы");
-                Console.Write("Введите номер:");
-                int id = int.Parse(Console.ReadLine());
-                Console.Write("Введите имя: ");
-                string name = Console.ReadLine();
-                Console.Write("Введите цвет: ");
-                string color = Console.ReadLine();
-                Console.Write("Введите редкость (1-5): ");
-                string rarity = Console.ReadLine();
-                Console.Write("Введите размер(small, medium, big, HUGE): ");
-                string size = Console.ReadLine();
-                Console.Write("Введите цену: ");
-                decimal price = decimal.Parse(Console.ReadLine());
-                try { logic.AddLabubu(id, name, color, rarity, size, price); }
-                catch
+                try
                 {
-                    Console.WriteLine("Ошибка!");
-                    return;
+                    Console.WriteLine("Добавление новой лабубы");
+
+                    string name = GetValidatedInput("Введите имя: ", false);
+                    string color = GetValidatedInput("Введите цвет: ", false);
+
+                    Labubu.RarityEnum rarity = GetValidRarity();
+                    Labubu.SizeEnum size = GetValidSize();
+                    decimal price = GetValidPrice();
+
+                    logic.AddLabubu(name, color, rarity, size, price);
+                    Console.WriteLine("Лабуба успешно добавлена!");
                 }
-                Console.WriteLine("Лабуба успешно добавлена!");
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
             }
             /// <summary>
             /// Функция для удаления лабубы через консоль
@@ -119,16 +117,12 @@ namespace ConsoleApp
                     GetAllLabubus();
                     Console.Write("Введите ID лабубы для изменения: ");
                     int id = int.Parse(Console.ReadLine());
-                    Console.Write("Введите новое имя: ");
-                    string newName = Console.ReadLine();
-                    Console.Write("Введите новый цвет: ");
-                    string newColor = Console.ReadLine();
-                    Console.Write("Введите новую редкость: ");
-                    string newRarity = Console.ReadLine();
-                    Console.Write("Введите новый размер: ");
-                    string newSize = Console.ReadLine();
-                    Console.Write("Введите новую цену: ");
-                    decimal newPrice = decimal.Parse(Console.ReadLine());
+
+                    string newName = GetValidatedInput("Введите новое имя: ", true);
+                    string newColor = GetValidatedInput("Введите новый цвет: ", true);
+                    Labubu.RarityEnum newRarity = GetValidRarity();
+                    Labubu.SizeEnum newSize = GetValidSize();
+                    decimal newPrice = GetValidPrice();
 
                     logic.UpdateLabubu(id, newName, newColor, newRarity, newSize, newPrice);
                     Console.WriteLine("Лабуба успешно изменена!");
@@ -174,7 +168,7 @@ namespace ConsoleApp
                         Console.WriteLine($"\n{group.Key}:");
                         foreach (var labubu in group.Value)
                         {
-                            Console.WriteLine($"  ID: {labubu.Id}, Имя: {labubu.Name}, Цвет: {labubu.Color}, Размер: {labubu.Size}");
+                            Console.WriteLine($"  ID: {labubu.Id}, Имя: {labubu.Name}, Цвет: {labubu.Color}, Размер: {labubu.Size}, Цена: {labubu.Price}");
                         }
                     }
                 }
@@ -196,10 +190,9 @@ namespace ConsoleApp
                     }
                     else
                     {
-                        for (int i = 0; i < allLabubus.Count; i++)
+                        foreach (var labubu in allLabubus)
                         {
-                            var labubu = allLabubus[i];
-                            Console.WriteLine($"[{i}] ID: {labubu[0]}, Имя: {labubu[1]}, Цвет: {labubu[2]}, Редкость: {labubu[3]}, Размер: {labubu[4]}, Цена: {labubu[5]}");
+                            Console.WriteLine($"ID: {labubu[0]}, Имя: {labubu[1]}, Цвет: {labubu[2]}, Редкость: {labubu[3]}, Размер: {labubu[4]}, Цена: {labubu[5]}");
                         }
                     }
                 }
@@ -245,6 +238,87 @@ namespace ConsoleApp
                 }
             }
         }
+        // Вспомогательные методы для валидации ввода
+        private static string GetValidatedInput(string prompt, bool allowEmpty)
+        {
+            string input;
+            do
+            {
+                Console.Write(prompt);
+                input = Console.ReadLine();
 
-    } 
+                if (!allowEmpty && string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Поле не может быть пустым! Попробуйте снова.");
+                }
+                else
+                {
+                    break;
+                }
+            } while (true);
+
+            return input?.Trim() ?? "";
+        }
+        private static Labubu.RarityEnum GetValidRarity()
+        {
+            while (true)
+            {
+                Console.WriteLine("Выберите редкость:");
+                Console.WriteLine("1*");
+                Console.WriteLine("2*");
+                Console.WriteLine("3*");
+                Console.WriteLine("4*");
+                Console.WriteLine("5*");
+                Console.Write("Введите номер (1-5): ");
+
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int rarityNum) && rarityNum >= 1 && rarityNum <= 5)
+                {
+                    return (Labubu.RarityEnum)rarityNum;
+                }
+                Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 5.");
+            }
+        }
+        private static Labubu.SizeEnum GetValidSize()
+        {
+            while (true)
+            {
+                Console.WriteLine("Выберите размер:");
+                Console.WriteLine("1 - small");
+                Console.WriteLine("2 - medium");
+                Console.WriteLine("3 - big");
+                Console.WriteLine("4 - HUGE");
+                Console.Write("Введите номер (1-4): ");
+
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out int sizeNum) && sizeNum >= 1 && sizeNum <= 4)
+                {
+                    return (Labubu.SizeEnum)(sizeNum - 1); // -1 потому что enum начинается с 0
+                }
+                Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 4.");
+            }
+        }
+        private static decimal GetValidPrice()
+        {
+            while (true)
+            {
+                Console.Write("Введите цену: ");
+                string input = Console.ReadLine();
+
+                if (decimal.TryParse(input, out decimal price))
+                {
+                    if (price > 0)
+                    {
+                        return price;
+                    }
+                    Console.WriteLine("Цена должна быть положительной! Попробуйте снова.");
+                }
+                else
+                {
+                    Console.WriteLine("Неверный формат цены! Попробуйте снова.");
+                }
+            }
+        }
+    }
+
 }
