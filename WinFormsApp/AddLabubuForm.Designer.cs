@@ -51,9 +51,10 @@ namespace WinFormsApp
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 15F);
-            label1.Location = new Point(104, 82);
+            label1.Location = new Point(149, 137);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(196, 28);
+            label1.Size = new Size(290, 41);
             label1.TabIndex = 0;
             label1.Text = "Добавление лабубу";
             label1.Click += label1_Click;
@@ -62,9 +63,10 @@ namespace WinFormsApp
             // 
             textName.AutoSize = true;
             textName.Font = new Font("Segoe UI", 12F);
-            textName.Location = new Point(44, 131);
+            textName.Location = new Point(63, 218);
+            textName.Margin = new Padding(4, 0, 4, 0);
             textName.Name = "textName";
-            textName.Size = new Size(41, 21);
+            textName.Size = new Size(61, 32);
             textName.TabIndex = 1;
             textName.Text = "Имя";
             // 
@@ -72,9 +74,10 @@ namespace WinFormsApp
             // 
             textColor.AutoSize = true;
             textColor.Font = new Font("Segoe UI", 12F);
-            textColor.Location = new Point(44, 161);
+            textColor.Location = new Point(63, 268);
+            textColor.Margin = new Padding(4, 0, 4, 0);
             textColor.Name = "textColor";
-            textColor.Size = new Size(45, 21);
+            textColor.Size = new Size(68, 32);
             textColor.TabIndex = 2;
             textColor.Text = "Цвет";
             // 
@@ -82,9 +85,10 @@ namespace WinFormsApp
             // 
             textRarity.AutoSize = true;
             textRarity.Font = new Font("Segoe UI", 12F);
-            textRarity.Location = new Point(44, 191);
+            textRarity.Location = new Point(63, 318);
+            textRarity.Margin = new Padding(4, 0, 4, 0);
             textRarity.Name = "textRarity";
-            textRarity.Size = new Size(75, 21);
+            textRarity.Size = new Size(112, 32);
             textRarity.TabIndex = 3;
             textRarity.Text = "Редкость";
             // 
@@ -92,33 +96,37 @@ namespace WinFormsApp
             // 
             textSize.AutoSize = true;
             textSize.Font = new Font("Segoe UI", 12F);
-            textSize.Location = new Point(44, 219);
+            textSize.Location = new Point(63, 365);
+            textSize.Margin = new Padding(4, 0, 4, 0);
             textSize.Name = "textSize";
-            textSize.Size = new Size(62, 21);
+            textSize.Size = new Size(94, 32);
             textSize.TabIndex = 4;
             textSize.Text = "Размер";
             // 
             // txtName
             // 
-            txtName.Location = new Point(130, 129);
+            txtName.Location = new Point(186, 215);
+            txtName.Margin = new Padding(4, 5, 4, 5);
             txtName.Name = "txtName";
-            txtName.Size = new Size(100, 23);
+            txtName.Size = new Size(141, 31);
             txtName.TabIndex = 5;
             txtName.TextChanged += txtName_TextChanged;
             // 
             // txtColor
             // 
-            txtColor.Location = new Point(130, 159);
+            txtColor.Location = new Point(186, 265);
+            txtColor.Margin = new Padding(4, 5, 4, 5);
             txtColor.Name = "txtColor";
-            txtColor.Size = new Size(100, 23);
+            txtColor.Size = new Size(141, 31);
             txtColor.TabIndex = 6;
             // 
             // btnAdd
             // 
             btnAdd.Font = new Font("Segoe UI", 12F);
-            btnAdd.Location = new Point(137, 300);
+            btnAdd.Location = new Point(196, 500);
+            btnAdd.Margin = new Padding(4, 5, 4, 5);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(93, 34);
+            btnAdd.Size = new Size(133, 57);
             btnAdd.TabIndex = 9;
             btnAdd.Text = "Добавить";
             btnAdd.UseVisualStyleBackColor = true;
@@ -127,55 +135,58 @@ namespace WinFormsApp
             // cmbSizes
             // 
             cmbSizes.FormattingEnabled = true;
-            cmbSizes.Location = new Point(130, 217);
+            cmbSizes.Location = new Point(186, 362);
+            cmbSizes.Margin = new Padding(4, 5, 4, 5);
             cmbSizes.Name = "cmbSizes";
-            cmbSizes.Size = new Size(100, 23);
+            cmbSizes.Size = new Size(141, 33);
             cmbSizes.TabIndex = 10;
             // 
             // cmbRarity
             // 
             cmbRarity.FormattingEnabled = true;
-            cmbRarity.Location = new Point(130, 189);
+            cmbRarity.Location = new Point(186, 315);
+            cmbRarity.Margin = new Padding(4, 5, 4, 5);
             cmbRarity.Name = "cmbRarity";
-            cmbRarity.Size = new Size(100, 23);
+            cmbRarity.Size = new Size(141, 33);
             cmbRarity.TabIndex = 11;
             // 
             // textPrice
             // 
             textPrice.AutoSize = true;
             textPrice.Font = new Font("Segoe UI", 12F);
-            textPrice.Location = new Point(44, 249);
+            textPrice.Location = new Point(63, 415);
+            textPrice.Margin = new Padding(4, 0, 4, 0);
             textPrice.Name = "textPrice";
-            textPrice.Size = new Size(47, 21);
+            textPrice.Size = new Size(71, 32);
             textPrice.TabIndex = 12;
             textPrice.Text = "Цена";
             textPrice.Click += label2_Click;
             // 
             // txtPrice
             // 
-            txtPrice.Location = new Point(130, 247);
-            txtPrice.Margin = new Padding(3, 2, 3, 2);
+            txtPrice.Location = new Point(186, 412);
+            txtPrice.Margin = new Padding(4, 3, 4, 3);
             txtPrice.Name = "txtPrice";
-            txtPrice.Size = new Size(100, 23);
+            txtPrice.Size = new Size(141, 31);
             txtPrice.TabIndex = 13;
             txtPrice.TextChanged += txtPrice_TextChanged;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(246, 129);
+            pictureBox1.Location = new Point(351, 215);
+            pictureBox1.Margin = new Padding(4, 5, 4, 5);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(140, 141);
+            pictureBox1.Size = new Size(200, 235);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 14;
             pictureBox1.TabStop = false;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.SendToBack();
             // 
             // AddLabubuForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(398, 375);
+            ClientSize = new Size(569, 625);
             Controls.Add(pictureBox1);
             Controls.Add(txtPrice);
             Controls.Add(textPrice);
@@ -189,6 +200,7 @@ namespace WinFormsApp
             Controls.Add(textColor);
             Controls.Add(textName);
             Controls.Add(label1);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "AddLabubuForm";
             Text = "Добавление лабубу";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

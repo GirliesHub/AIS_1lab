@@ -93,9 +93,18 @@ namespace WinFormsApp
                 MessageBox.Show("Ничего не выбрано");
                 return;
             }
-            int SelectedNum = listViewLabubus.SelectedItems[0].Index;
-            logic.RemoveLabubu(SelectedNum);
-            RefreshLabubuList();
+            int selectedId = int.Parse(listViewLabubus.SelectedItems[0].Text);
+
+            try
+            {
+                logic.RemoveLabubu(selectedId);
+                RefreshLabubuList();
+                MessageBox.Show("Лабуба удалена!");
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
         }
 
@@ -145,12 +154,12 @@ namespace WinFormsApp
 
             var allLabubus = logic.GetAllLabubus();
             var filteredList = allLabubus.Where(l =>
-                l[0].ToLower().Contains(searchText) || // ID
-                l[1].ToLower().Contains(searchText) || // Name
-                l[2].ToLower().Contains(searchText) || // Color
-                l[3].ToLower().Contains(searchText) || // Rarity
-                l[4].ToLower().Contains(searchText) || // Size
-                l[5].ToLower().Contains(searchText)    // Price
+                l[0].ToLower().Contains(searchText) ||
+                l[1].ToLower().Contains(searchText) ||
+                l[2].ToLower().Contains(searchText) ||
+                l[3].ToLower().Contains(searchText) ||
+                l[4].ToLower().Contains(searchText) ||
+                l[5].ToLower().Contains(searchText)
             ).ToList();
 
             listViewLabubus.Items.Clear();
@@ -214,7 +223,6 @@ namespace WinFormsApp
 
             foreach (var group in groupedData)
             {
-
                 var groupHeader = new ListViewItem($"--- {group.Key} ---");
                 groupHeader.BackColor = Color.LightPink;
                 groupHeader.Font = new Font(listViewLabubus.Font, FontStyle.Bold);
@@ -225,19 +233,51 @@ namespace WinFormsApp
                     var item = new ListViewItem(labubu.Id.ToString());
                     item.SubItems.Add(labubu.Name);
                     item.SubItems.Add(labubu.Color);
-                    item.SubItems.Add(labubu.Rarity);
-                    item.SubItems.Add(labubu.Size);
+                    item.SubItems.Add(RarityEnumToString(labubu.Rarity));
+                    item.SubItems.Add(SizeEnumToString(labubu.Size));
                     item.SubItems.Add(labubu.Price.ToString("C"));
                     listViewLabubus.Items.Add(item);
                 }
             }
 
+            // Показываем информацию о группировке
             string info = $"Группировка по {criteria}:\n";
             foreach (var group in groupedData)
             {
                 info += $"{group.Key}: {group.Value.Count} лабуб\n";
             }
             MessageBox.Show(info, "Информация о группировке", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Преобразует RarityEnum в строку для отображения
+        /// </summary>
+        private string RarityEnumToString(Labubu.RarityEnum rarity)
+        {
+            return rarity switch
+            {
+                Labubu.RarityEnum.OneStar => "1*",
+                Labubu.RarityEnum.TwoStars => "2*",
+                Labubu.RarityEnum.ThreeStars => "3*",
+                Labubu.RarityEnum.FourStars => "4*",
+                Labubu.RarityEnum.FiveStars => "5*",
+                _ => rarity.ToString()
+            };
+        }
+
+        /// <summary>
+        /// Преобразует SizeEnum в строку для отображения
+        /// </summary>
+        private string SizeEnumToString(Labubu.SizeEnum size)
+        {
+            return size switch
+            {
+                Labubu.SizeEnum.Small => "Small",
+                Labubu.SizeEnum.Medium => "Medium",
+                Labubu.SizeEnum.Big => "Big",
+                Labubu.SizeEnum.HUGE => "HUGE",
+                _ => size.ToString()
+            };
         }
 
         /// <summary>
@@ -319,7 +359,7 @@ namespace WinFormsApp
         {
             try
             {
-                this.BackgroundImage = Image.FromFile(@"C:\Users\lonit\source\repos\AIS_1lab\labubu_background.jpg");
+                this.BackgroundImage = Image.FromFile(@"C:\Users\lonit\source\repos\GirliesHub\AIS_1lab\labubu_background.jpg");
                 this.BackgroundImageLayout = ImageLayout.Stretch;
             }
             catch

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace WinFormsApp
 {
@@ -29,28 +30,54 @@ namespace WinFormsApp
         /// <param name="e"></param>
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            string newName = textName.Text;
-            string newColor = textColor.Text;
-            string newRarity = cmbRarity.SelectedItem?.ToString();
-            string newSize = cmbSize.SelectedItem?.ToString();
-
-            if (!decimal.TryParse(textPrice1.Text, out decimal newPrice))
+            // Проверки
+            if (cmbRarity.SelectedItem == null || cmbSize.SelectedItem == null)
             {
-                MessageBox.Show("Введите корректную цену!");
+                MessageBox.Show("Выберите редкость и размер!");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(textName.Text) || string.IsNullOrWhiteSpace(textColor.Text))
+            {
+                MessageBox.Show("Заполните все поля!");
+                return;
+            }
+
+            if (!decimal.TryParse(textPrice1.Text, out decimal price) || price <= 0)
+            {
+                MessageBox.Show("Цена должна быть положительным числом!");
                 return;
             }
 
             try
             {
-                logic.UpdateLabubu(id, newName, newColor, newRarity, newSize, newPrice);
+                Labubu.RarityEnum rarity = cmbRarity.SelectedItem.ToString() switch
+                {
+                    "1*" => Labubu.RarityEnum.OneStar,
+                    "2*" => Labubu.RarityEnum.TwoStars,
+                    "3*" => Labubu.RarityEnum.ThreeStars,
+                    "4*" => Labubu.RarityEnum.FourStars,
+                    "5*" => Labubu.RarityEnum.FiveStars,
+                    _ => Labubu.RarityEnum.OneStar
+                };
+
+                Labubu.SizeEnum size = cmbSize.SelectedItem.ToString().ToLower() switch
+                {
+                    "small" => Labubu.SizeEnum.Small,
+                    "medium" => Labubu.SizeEnum.Medium,
+                    "big" => Labubu.SizeEnum.Big,
+                    "huge" => Labubu.SizeEnum.HUGE,
+                    _ => Labubu.SizeEnum.Small
+                };
+
+                logic.UpdateLabubu(id, textName.Text, textColor.Text, rarity, size, price);
+                MessageBox.Show("Лабуба изменена!");
+                this.Close();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Одно или несколько из полей пустое(ые)!");
-                return;
+                MessageBox.Show($"Ошибка: {ex.Message}");
             }
-            MessageBox.Show("Лабуба изменена");
-            this.Close();
         }
         /// <summary>
         /// выпадающие списки

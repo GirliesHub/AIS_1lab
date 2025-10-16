@@ -22,7 +22,7 @@ namespace Model
         /// <param name="size"></param>
         /// <param name="price"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void AddLabubu(string name, string color, Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
+        public void AddLabubu(int number, string name, string color, Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(color) || price <= 0)
             {
