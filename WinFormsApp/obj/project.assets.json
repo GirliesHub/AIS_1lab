@@ -27,23 +27,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lonit\\.nuget\\packages\\": {},
+    "C:\\Users\\Вероника\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj",
+      "projectUniqueName": "C:\\Users\\Вероника\\Source\\Repos\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj",
       "projectName": "WinFormsApp",
-      "projectPath": "C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj",
-      "packagesPath": "C:\\Users\\lonit\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\WinFormsApp\\obj\\",
+      "projectPath": "C:\\Users\\Вероника\\Source\\Repos\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj",
+      "packagesPath": "C:\\Users\\Вероника\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Вероника\\Source\\Repos\\AIS_1lab\\WinFormsApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\lonit\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Вероника\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -58,8 +58,8 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\Model\\Model.csproj": {
-              "projectPath": "C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\Model\\Model.csproj"
+            "C:\\Users\\Вероника\\Source\\Repos\\AIS_1lab\\Model\\Model.csproj": {
+              "projectPath": "C:\\Users\\Вероника\\Source\\Repos\\AIS_1lab\\Model\\Model.csproj"
             }
           }
         }
