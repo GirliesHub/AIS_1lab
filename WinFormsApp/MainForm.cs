@@ -1,5 +1,6 @@
 using Microsoft.VisualBasic.Logging;
 using Model;
+using BusinessLogic;
 
 namespace WinFormsApp
 {
@@ -230,7 +231,7 @@ namespace WinFormsApp
 
                 foreach (var labubu in group.Value)
                 {
-                    var item = new ListViewItem(labubu.Id.ToString());
+                    var item = new ListViewItem(labubu.ID.ToString());
                     item.SubItems.Add(labubu.Name);
                     item.SubItems.Add(labubu.Color);
                     item.SubItems.Add(RarityEnumToString(labubu.Rarity));
@@ -290,9 +291,9 @@ namespace WinFormsApp
             try
             {
                 var mostExpensive = logic.FindMostLeastExpensiveLabubu(true);
-                HighlightLabubu(mostExpensive.Id);
+                HighlightLabubu(mostExpensive.ID);
 
-                MessageBox.Show($"Самая дорогая лабубу:\nID: {mostExpensive.Id}\nИмя: {mostExpensive.Name}\nЦена: {mostExpensive.Price:C}",
+                MessageBox.Show($"Самая дорогая лабубу:\nID: {mostExpensive.ID}\nИмя: {mostExpensive.Name}\nЦена: {mostExpensive.Price:C}",
                               "Самая дорогая лабубу", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (InvalidOperationException ex)
@@ -311,9 +312,9 @@ namespace WinFormsApp
             try
             {
                 var cheapest = logic.FindMostLeastExpensiveLabubu(false);
-                HighlightLabubu(cheapest.Id);
+                HighlightLabubu(cheapest.ID);
 
-                MessageBox.Show($"Самая дешевая лабубу:\nID: {cheapest.Id}\nИмя: {cheapest.Name}\nЦена: {cheapest.Price:C}",
+                MessageBox.Show($"Самая дешевая лабубу:\nID: {cheapest.ID}\nИмя: {cheapest.Name}\nЦена: {cheapest.Price:C}",
                               "Самая дешевая лабубу", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (InvalidOperationException ex)

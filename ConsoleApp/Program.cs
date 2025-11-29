@@ -6,8 +6,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
+using BusinessLogic;
 
-namespace ConsoleApp // Добавить проверку на отр.цену, enum на редкость и размер, пофиксить id (не давать пользователю в консоли прописать номер), потестить на пустые поля
+
+namespace ConsoleApp // Проверить работоспособность, добавить summary в конце 
 {
     public class Program
     {
@@ -70,7 +72,7 @@ namespace ConsoleApp // Добавить проверку на отр.цену, 
                 try
                 {
                     Console.WriteLine("Добавление новой лабубы");
-
+                    int number = logic.GetAllLabubus().Count + 1;
                     string name = GetValidatedInput("Введите имя: ", false);
                     string color = GetValidatedInput("Введите цвет: ", false);
 
@@ -78,7 +80,7 @@ namespace ConsoleApp // Добавить проверку на отр.цену, 
                     Labubu.SizeEnum size = GetValidSize();
                     decimal price = GetValidPrice();
 
-                    logic.AddLabubu(name, color, rarity, size, price);
+                    logic.AddLabubu(number, name, color, rarity, size, price);
                     Console.WriteLine("Лабуба успешно добавлена!");
                 }
                 catch (Exception ex)
@@ -168,7 +170,7 @@ namespace ConsoleApp // Добавить проверку на отр.цену, 
                         Console.WriteLine($"\n{group.Key}:");
                         foreach (var labubu in group.Value)
                         {
-                            Console.WriteLine($"  ID: {labubu.Id}, Имя: {labubu.Name}, Цвет: {labubu.Color}, Размер: {labubu.Size}, Цена: {labubu.Price}");
+                            Console.WriteLine($"  ID: {labubu.ID}, Имя: {labubu.Name}, Цвет: {labubu.Color}, Размер: {labubu.Size}, Цена: {labubu.Price}");
                         }
                     }
                 }
@@ -192,7 +194,15 @@ namespace ConsoleApp // Добавить проверку на отр.цену, 
                     {
                         foreach (var labubu in allLabubus)
                         {
-                            Console.WriteLine($"ID: {labubu[0]}, Имя: {labubu[1]}, Цвет: {labubu[2]}, Редкость: {labubu[3]}, Размер: {labubu[4]}, Цена: {labubu[5]}");
+                            Console.WriteLine(
+                                   $"ID: {labubu.ID}, " +
+                                   $"Имя: {labubu.Name}, " +
+                                   $"Цвет: {labubu.Color}, " +
+                                   $"Редкость: {labubu.Rarity}, " +
+                                   $"Размер: {labubu.Size}, " +
+                                   $"Цена: {labubu.Price}"
+                                );
+
                         }
                     }
                 }
@@ -293,7 +303,7 @@ namespace ConsoleApp // Добавить проверку на отр.цену, 
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out int sizeNum) && sizeNum >= 1 && sizeNum <= 4)
                 {
-                    return (Labubu.SizeEnum)(sizeNum - 1); // -1 потому что enum начинается с 0
+                    return (Labubu.SizeEnum)(sizeNum - 1); // enum с 0 поэтому -1
                 }
                 Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 4.");
             }

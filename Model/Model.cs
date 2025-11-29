@@ -1,17 +1,18 @@
 namespace Model
 {
-    public class Labubu
+    public class Labubu : IDomainObject
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public RarityEnum Rarity { get; set; }
         public SizeEnum Size { get; set; }
         public decimal Price { get; set; }
 
+        public Labubu() { }
         public Labubu(int id, string name, string color, RarityEnum rarity, SizeEnum size, decimal price)
         {
-            Id = id;
+            ID = id;
             Name = name;
             Color = color;
             Rarity = rarity;
