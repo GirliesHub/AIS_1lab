@@ -5,7 +5,13 @@ namespace DataAccessLayer
 {
     public class DBContext : DbContext
     {
-        public DBContext() : base("name=LibraryDB")  
+        private static readonly string DefaultConnectionString =
+        @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\LibraryDB.mdf;Integrated Security=True";
+        public DBContext() : base("name=LibraryDB")
+        {
+        }
+
+        public DBContext(string connectionString) : base(connectionString ?? DefaultConnectionString)
         {
         }
 

@@ -23,6 +23,14 @@ namespace WinFormsApp
             InitializeComboBoxes();
             this.logic = logic;
             this.id = Id;
+            if (id <= 0)
+            {
+                MessageBox.Show($"Ошибка: некорректный ID: {id}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
+            }
+            LoadLabubuData();
         }
         /// <summary>
         /// изменить лабубу
@@ -96,6 +104,46 @@ namespace WinFormsApp
         private void textPrice1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        /// <summary>
+        /// Загрузка данных о лабубах
+        /// </summary>
+        private void LoadLabubuData()
+        {
+            try
+            {
+                var labubu = logic.GetAllLabubus().FirstOrDefault(l => l.ID == id);
+
+                if (labubu == null)
+                {
+                    MessageBox.Show($"Лабуба с ID {id} не найдена в базе данных",
+                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    return;
+                }
+
+                textName.Text = labubu.Name;
+                textColor.Text = labubu.Color;
+
+                string rarityString = labubu.Rarity switch
+                {
+                    Labubu.RarityEnum.OneStar => "1*",
+                    Labubu.RarityEnum.TwoStars => "2*",
+                    Labubu.RarityEnum.ThreeStars => "3*",
+                    Labubu.RarityEnum.FourStars => "4*",
+                    Labubu.RarityEnum.FiveStars => "5*",
+                    _ => "1*"
+                };
+                cmbRarity.SelectedItem = rarityString;
+
+                cmbSize.SelectedItem = labubu.Size.ToString();
+
+                textPrice1.Text = labubu.Price.ToString("F2");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+            }
         }
     }
 }

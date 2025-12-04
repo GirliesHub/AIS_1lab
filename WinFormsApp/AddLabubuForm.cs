@@ -124,8 +124,11 @@ namespace WinFormsApp
             }
         }
 
-
-        //обработчики событий 
+       /// <summary>
+       /// Обработчики событий
+       /// </summary>
+       /// <param name="sender"></param>
+       /// <param name="e"></param>
         private void label1_Click(object sender, EventArgs e)
         {
 

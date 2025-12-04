@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Model
 {
     public class Labubu : IDomainObject
@@ -6,8 +8,16 @@ namespace Model
         public string Name { get; set; }
         public string Color { get; set; }
         public RarityEnum Rarity { get; set; }
-        public SizeEnum Size { get; set; }
         public decimal Price { get; set; }
+
+        [NotMapped]
+        public SizeEnum Size
+        {
+            get => (SizeEnum)Enum.Parse(typeof(SizeEnum), SizeInternal);
+            set => SizeInternal = value.ToString();
+        }
+        [Column("Size")]
+        public string SizeInternal { get; set; }
 
         public Labubu() { }
         public Labubu(int id, string name, string color, RarityEnum rarity, SizeEnum size, decimal price)

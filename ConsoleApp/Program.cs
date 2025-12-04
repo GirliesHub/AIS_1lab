@@ -7,13 +7,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Model;
 using BusinessLogic;
+using DataAccessLayer;
 
 
 namespace ConsoleApp // Проверить работоспособность, добавить summary в конце 
 {
     public class Program
     {
-        static Logic logic = new Logic();
+        static Logic logic;
+
+        static Program()
+        {
+            try
+            {
+                logic = new Logic();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка инициализации: {ex.Message}");
+                logic = new Logic(new EntityRepository<Labubu>());
+            }
+        }
         static void Main(string[] args)
         {
             bool exit = false;
@@ -72,15 +86,18 @@ namespace ConsoleApp // Проверить работоспособность, �
                 try
                 {
                     Console.WriteLine("Добавление новой лабубы");
-                    int number = logic.GetAllLabubus().Count + 1;
+                    var allLabubus = logic.GetAllLabubus();
+                    int newId = allLabubus.Count > 0
+                        ? allLabubus.Max(l => l.ID) + 1
+                        : 1;
+
                     string name = GetValidatedInput("Введите имя: ", false);
                     string color = GetValidatedInput("Введите цвет: ", false);
-
                     Labubu.RarityEnum rarity = GetValidRarity();
                     Labubu.SizeEnum size = GetValidSize();
                     decimal price = GetValidPrice();
 
-                    logic.AddLabubu(number, name, color, rarity, size, price);
+                    logic.AddLabubu(newId, name, color, rarity, size, price); 
                     Console.WriteLine("Лабуба успешно добавлена!");
                 }
                 catch (Exception ex)
@@ -179,6 +196,9 @@ namespace ConsoleApp // Проверить работоспособность, �
                     Console.WriteLine($"Ошибка: {ex.Message}");
                 }
             }
+            ///<summary>
+            ///Метод, возвращающий список всех лабуб
+            ///</summary>>
             static void GetAllLabubus()
             {
                 try
@@ -211,6 +231,9 @@ namespace ConsoleApp // Проверить работоспособность, �
                     Console.WriteLine($"Ошибка: {ex.Message}");
                 }
             }
+            ///<summary>
+            ///Метод, ищущий самую дорогую/дешевую лабубу
+            ///</summary>
             static void FindMostLeastExpensiveLabubu()
             {
                 try
@@ -248,7 +271,12 @@ namespace ConsoleApp // Проверить работоспособность, �
                 }
             }
         }
-        // Вспомогательные методы для валидации ввода
+       /// <summary>
+       /// Вспомогательные методы для правильного ввода значений
+       /// </summary>
+       /// <param name="prompt"></param>
+       /// <param name="allowEmpty"></param>
+       /// <returns></returns>
         private static string GetValidatedInput(string prompt, bool allowEmpty)
         {
             string input;

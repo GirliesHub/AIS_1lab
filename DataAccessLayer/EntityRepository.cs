@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
-
-namespace DataAccessLayer //добавь summary 
+/// <summary>
+/// Entity репозиторий
+/// /<summary>
+namespace DataAccessLayer
 {
     public class EntityRepository<T> : IRepository<T> where T : class, IDomainObject
     {
@@ -14,6 +16,11 @@ namespace DataAccessLayer //добавь summary
         public EntityRepository()
         {
             _context = new DBContext();
+        }
+
+        public EntityRepository(string connectionString)
+        {
+            _context = new DBContext(connectionString);
         }
 
         public IEnumerable<T> GetAll()
@@ -34,8 +41,12 @@ namespace DataAccessLayer //добавь summary
 
         public void Update(T entity)
         {
-            _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-            _context.SaveChanges();
+            var existing = _context.Set<T>().Find((entity as IDomainObject)?.ID);
+            if (existing != null)
+            {
+                _context.Entry(existing).CurrentValues.SetValues(entity);
+                _context.SaveChanges();
+            }
         }
 
         public void Remove(int id)
@@ -46,6 +57,11 @@ namespace DataAccessLayer //добавь summary
                 _context.Set<T>().Remove(entity);
                 _context.SaveChanges();
             }
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
         }
     }
 

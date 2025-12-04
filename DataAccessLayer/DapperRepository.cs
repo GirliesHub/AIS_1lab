@@ -8,8 +8,8 @@ namespace DataAccessLayer
 {
     public class DapperRepository<T> : IRepository<T> where T : class, IDomainObject
     {
-        private readonly string _connectionString =
-            "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=LibraryDB;Integrated Security=True";
+        private readonly string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\LibraryDB.mdf\";Integrated Security=True";
+           
 
         private string Table => typeof(T).Name + "s";
 

@@ -3,8 +3,12 @@ using System.Data.Entity;
 using System.Linq;
 using Model;
 
-namespace DataAccessLayer //добавь summary 
+namespace DataAccessLayer 
 {
+    /// <summary>
+    /// Слой доступа к данным
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class EFRepository<T> : IRepository<T>
         where T : class, IDomainObject
     {
@@ -35,8 +39,12 @@ namespace DataAccessLayer //добавь summary
 
         public void Update(T entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
+            var existing = _set.Find((entity as IDomainObject)?.ID);
+            if (existing != null)
+            {
+                _context.Entry(existing).CurrentValues.SetValues(entity);
+                _context.SaveChanges();
+            }
         }
 
         public void Remove(int id)

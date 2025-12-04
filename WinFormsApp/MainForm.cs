@@ -49,15 +49,16 @@ namespace WinFormsApp
         private void RefreshLabubuList()
         {
             listViewLabubus.Items.Clear();
-
             foreach (var labubu in logic.GetAllLabubus())
             {
-                var item = new ListViewItem(labubu[0]);
-                item.SubItems.Add(labubu[1]);
-                item.SubItems.Add(labubu[2]);
-                item.SubItems.Add(labubu[3]);
-                item.SubItems.Add(labubu[4]);
-                item.SubItems.Add(labubu[5]);
+                var item = new ListViewItem(labubu.ID.ToString());
+                item.SubItems.Add(labubu.Name);
+                item.SubItems.Add(labubu.Color);
+                item.SubItems.Add(labubu.Rarity.ToString());
+                item.SubItems.Add(labubu.Price.ToString("F2"));
+                string sizeDisplay = labubu.Size.ToString();
+                item.SubItems.Add(sizeDisplay);
+
                 listViewLabubus.Items.Add(item);
             }
         }
@@ -116,16 +117,19 @@ namespace WinFormsApp
         /// <param name="e"></param>
         private void btnUpdateLabubu_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var selecteditem = listViewLabubus.SelectedItems[0].Text;
-            }
-            catch
+            if (listViewLabubus.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Ничего не выбрано");
                 return;
             }
-            var updateForm = new UpdateLabubuForm(logic, listViewLabubus.SelectedItems[0].Index);
+            var selectedItem = listViewLabubus.SelectedItems[0];
+            if (!int.TryParse(selectedItem.Text, out int selectedId))
+            {
+                MessageBox.Show("Ошибка: неверный формат ID");
+                return;
+            }
+
+            var updateForm = new UpdateLabubuForm(logic, selectedId); 
             updateForm.ShowDialog();
             RefreshLabubuList();
         }
@@ -145,35 +149,46 @@ namespace WinFormsApp
         /// </summary>
         private void SearchLabubu()
         {
-            string searchText = txtSearch.Text.ToLower();
+            string searchText = txtSearch.Text.Trim().ToLower();
 
-            if (string.IsNullOrWhiteSpace(searchText))
+            if (string.IsNullOrEmpty(searchText))
             {
                 RefreshLabubuList();
                 return;
             }
 
             var allLabubus = logic.GetAllLabubus();
+
             var filteredList = allLabubus.Where(l =>
-                l[0].ToLower().Contains(searchText) ||
-                l[1].ToLower().Contains(searchText) ||
-                l[2].ToLower().Contains(searchText) ||
-                l[3].ToLower().Contains(searchText) ||
-                l[4].ToLower().Contains(searchText) ||
-                l[5].ToLower().Contains(searchText)
+                l.ID.ToString().Contains(searchText) ||
+                (l.Name ?? "").ToLower().Contains(searchText) ||
+                (l.Color ?? "").ToLower().Contains(searchText) ||
+                l.Rarity.ToString().ToLower().Contains(searchText) ||
+                ((int)l.Rarity).ToString().Contains(searchText) ||
+                l.Price.ToString("F2").Contains(searchText) ||
+                l.Price.ToString().Contains(searchText) ||
+                l.Size.ToString().ToLower().Contains(searchText)
             ).ToList();
 
+            DisplayLabubuList(filteredList);
+        }
+        private void DisplayLabubuList(List<Labubu> labubus)
+        {
             listViewLabubus.Items.Clear();
-            foreach (var labubuData in filteredList)
+
+            foreach (var labubu in labubus)
             {
-                var item = new ListViewItem(labubuData[0]);
-                item.SubItems.Add(labubuData[1]);
-                item.SubItems.Add(labubuData[2]);
-                item.SubItems.Add(labubuData[3]);
-                item.SubItems.Add(labubuData[4]);
-                item.SubItems.Add(labubuData[5]);
+                var item = new ListViewItem(labubu.ID.ToString());
+
+                item.SubItems.Add(labubu.Name ?? "");
+                item.SubItems.Add(labubu.Color ?? "");
+                string rarityDisplay = $"{(int)labubu.Rarity}";
+                item.SubItems.Add(rarityDisplay);
+                item.SubItems.Add(labubu.Price.ToString("N2") + " руб.");
+                item.SubItems.Add(labubu.Size.ToString());
                 listViewLabubus.Items.Add(item);
             }
+
         }
 
 
@@ -241,7 +256,6 @@ namespace WinFormsApp
                 }
             }
 
-            // Показываем информацию о группировке
             string info = $"Группировка по {criteria}:\n";
             foreach (var group in groupedData)
             {
@@ -341,8 +355,11 @@ namespace WinFormsApp
                 }
             }
         }
-
-        // обработчики событий поиска
+        /// <summary>
+        /// Обработчики событий поиска
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtSearch_TextChanged(object sender, EventArgs e)
         {
             SearchLabubu();
