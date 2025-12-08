@@ -1,61 +1,126 @@
 ﻿using DataAccessLayer;
 using Model;
-using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BusinessLogic
 {
     /// <summary>
-    /// Логика приложения
+    /// Логика приложения для работы с Labubu
     /// </summary>
-    public class Logic 
+    public class Logic
     {
-        private readonly IRepository<Labubu> repository;
+        private readonly IRepository<Labubu> _repository;
 
-        public Logic()
+        /// <summary>
+        /// Конструктор с внедрением зависимости (Dependency Injection)
+        /// </summary>
+        /// <param name="repository">Репозиторий для работы с данными</param>
+        public Logic(IRepository<Labubu> repository)
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true)
-                .Build();
-
-            string framework = config["DataAccessFramework"] ?? "EF";
-
-            repository = framework == "Dapper"
-                ? (IRepository<Labubu>)new DapperRepository<Labubu>()
-                : new EntityRepository<Labubu>();
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public Logic(IRepository<Labubu> repo)
+        /// <summary>
+        /// Добавляет новую лабубу
+        /// </summary>
+        public void AddLabubu(Labubu labubu)
         {
-            repository = repo;
+            if (labubu == null)
+                throw new ArgumentNullException(nameof(labubu));
+
+            if (labubu.ID <= 0)
+            {
+                var allLabubus = _repository.GetAll().ToList();
+                labubu.ID = allLabubus.Count > 0 ? allLabubus.Max(l => l.ID) + 1 : 1;
+            }
+
+            _repository.Create(labubu);
         }
 
-       /// <summary>
-       /// CRUD операции
-       /// </summary>
-       /// <param name="id"></param>
-       /// <param name="name"></param>
-       /// <param name="color"></param>
-       /// <param name="rarity"></param>
-       /// <param name="size"></param>
-       /// <param name="price"></param>
-
-        public void AddLabubu(int id, string name, string color,
-    Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
+        /// <summary>
+        /// Получает все лабубы
+        /// </summary>
+        public List<Labubu> GetAllLabubus()
         {
-            try
-            {
-                var existing = repository.Get(id);
-                if (existing != null)
-                {
-                    var all = repository.GetAll().ToList();
-                    id = all.Count > 0 ? all.Max(l => l.ID) + 1 : 1;
-                }
-            }
-            catch
-            {
-            }
+            return _repository.GetAll().ToList();
+        }
 
-            repository.Create(new Labubu
+        /// <summary>
+        /// Удаляет лабубу по ID
+        /// </summary>
+        public void RemoveLabubu(int id)
+        {
+            _repository.Remove(id);
+        }
+
+        /// <summary>
+        /// Обновляет лабубу
+        /// </summary>
+        public void UpdateLabubu(Labubu labubu)
+        {
+            if (labubu == null)
+                throw new ArgumentNullException(nameof(labubu));
+
+            var existing = _repository.Get(labubu.ID);
+            if (existing == null)
+                throw new ArgumentException($"Лабуба с ID {labubu.ID} не найдена");
+
+            _repository.Update(labubu);
+        }
+
+        /// <summary>
+        /// Группирует лабубы по критерию
+        /// </summary>
+        public Dictionary<string, List<Labubu>> GroupLabubu(Labubu.GroupByCriteria criteria)
+        {
+            var all = _repository.GetAll();
+            return criteria switch
+            {
+                Labubu.GroupByCriteria.Rarity =>
+                    all.GroupBy(x => x.Rarity.ToString())
+                       .ToDictionary(g => g.Key, g => g.ToList()),
+                Labubu.GroupByCriteria.Size =>
+                    all.GroupBy(x => x.Size.ToString())
+                       .ToDictionary(g => g.Key, g => g.ToList()),
+                _ => throw new ArgumentException("Unknown criteria")
+            };
+        }
+
+        /// <summary>
+        /// Находит самую дорогую или дешевую лабубу
+        /// </summary>
+        public Labubu FindMostLeastExpensiveLabubu(bool findMostExpensive)
+        {
+            var list = _repository.GetAll().ToList();
+            if (list.Count == 0)
+                throw new InvalidOperationException("Список пуст");
+
+            return findMostExpensive
+                ? list.OrderByDescending(x => x.Price).First()
+                : list.OrderBy(x => x.Price).First();
+        }
+
+        /// <summary>
+        /// Получает лабубу по ID
+        /// </summary>
+        public Labubu GetLabubuById(int id)
+        {
+            return _repository.Get(id);
+        }
+        /// <summary>
+        /// Метод обновления лабубу
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="color"></param>
+        /// <param name="rarity"></param>
+        /// <param name="size"></param>
+        /// <param name="price"></param>
+        public void UpdateLabubu(int id, string name, string color, Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
+        {
+            var labubu = new Labubu
             {
                 ID = id,
                 Name = name,
@@ -63,69 +128,9 @@ namespace BusinessLogic
                 Rarity = rarity,
                 Size = size,
                 Price = price
-            });
-        }
-
-        public List<Labubu> GetAllLabubus()
-        {
-            return repository.GetAll().ToList();
-        }
-
-        public void RemoveLabubu(int id)
-        {
-            repository.Remove(id);
-        }
-
-        public void UpdateLabubu(int id, string name, string color,
-    Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
-        {
-            var existing = repository.Get(id);
-            if (existing == null)
-            {
-                throw new ArgumentException($"Лабуба с ID {id} не найдена");
-            }
-
-            existing.Name = name;
-            existing.Color = color;
-            existing.Rarity = rarity;
-            existing.Size = size;
-            existing.Price = price;
-
-            repository.Update(existing);
-        }
-
-        public Dictionary<string, List<Labubu>> GroupLabubu(Labubu.GroupByCriteria criteria)
-        {
-            var all = repository.GetAll();
-
-            return criteria switch
-            {
-                Labubu.GroupByCriteria.Rarity =>
-                    all.GroupBy(x => x.Rarity.ToString()).ToDictionary(g => g.Key, g => g.ToList()),
-
-                Labubu.GroupByCriteria.Size =>
-                    all.GroupBy(x => x.Size.ToString()).ToDictionary(g => g.Key, g => g.ToList()),
-
-                _ => throw new ArgumentException("Unknown criteria")
             };
+
+            UpdateLabubu(labubu);
         }
-
-        public Labubu FindMostLeastExpensiveLabubu(bool findMostExpensive)
-        {
-            var list = repository.GetAll().ToList();
-
-            if (list.Count == 0)
-                throw new InvalidOperationException("Список пуст");
-
-            if (findMostExpensive)
-                return list.OrderByDescending(x => x.Price).First();
-            else
-                return list.OrderBy(x => x.Price).First();
-        }
-        public Labubu GetLabubuById(int id)
-        {
-            return repository.Get(id);
-        }
-
     }
 }

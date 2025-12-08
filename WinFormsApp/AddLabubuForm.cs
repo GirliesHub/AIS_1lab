@@ -110,18 +110,24 @@ namespace WinFormsApp
 
             try
             {
-                logic.AddLabubu(number, name, color, rarity, size, price);
+                var labubu = new Labubu
+                {
+                    Name = txtName.Text,
+                    Color = txtColor.Text,
+                    Rarity = ParseRarity(cmbRarity.SelectedItem.ToString()),
+                    Size = ParseSize(cmbSizes.SelectedItem.ToString()),
+                    Price = decimal.Parse(txtPrice.Text)
+                };
+
+                logic.AddLabubu(labubu); 
                 MessageBox.Show("Лабуба добавлена.");
                 this.Close();
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при добавлении: {ex.Message}");
             }
+
         }
 
        /// <summary>

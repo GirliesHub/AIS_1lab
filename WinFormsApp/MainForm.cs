@@ -1,14 +1,18 @@
 using Microsoft.VisualBasic.Logging;
 using Model;
 using BusinessLogic;
+using BusinessLogic.BusinessLogic;
 
 namespace WinFormsApp
 {
     public partial class MainForm : Form
     {
-        private Logic logic = new Logic();
+        private Logic _logic;
         public MainForm()
         {
+            NinjectService.Initialize();
+            _logic = NinjectService.Get<Logic>();
+
             InitializeComponent();
             InitializeListView();
             RefreshLabubuList();
@@ -49,7 +53,7 @@ namespace WinFormsApp
         private void RefreshLabubuList()
         {
             listViewLabubus.Items.Clear();
-            foreach (var labubu in logic.GetAllLabubus())
+            foreach (var labubu in _logic.GetAllLabubus())
             {
                 var item = new ListViewItem(labubu.ID.ToString());
                 item.SubItems.Add(labubu.Name);
@@ -72,7 +76,7 @@ namespace WinFormsApp
         {
             try
             {
-                var addForm = new AddLabubuForm(logic);
+                var addForm = new AddLabubuForm(_logic);
                 addForm.ShowDialog();
                 RefreshLabubuList();
             }
@@ -99,7 +103,7 @@ namespace WinFormsApp
 
             try
             {
-                logic.RemoveLabubu(selectedId);
+                _logic.RemoveLabubu(selectedId);
                 RefreshLabubuList();
                 MessageBox.Show("Лабуба удалена!");
             }
@@ -129,7 +133,7 @@ namespace WinFormsApp
                 return;
             }
 
-            var updateForm = new UpdateLabubuForm(logic, selectedId); 
+            var updateForm = new UpdateLabubuForm(_logic, selectedId);
             updateForm.ShowDialog();
             RefreshLabubuList();
         }
@@ -157,7 +161,7 @@ namespace WinFormsApp
                 return;
             }
 
-            var allLabubus = logic.GetAllLabubus();
+            var allLabubus = _logic.GetAllLabubus();
 
             var filteredList = allLabubus.Where(l =>
                 l.ID.ToString().Contains(searchText) ||
@@ -201,7 +205,7 @@ namespace WinFormsApp
         {
             try
             {
-                var groupedData = logic.GroupLabubu(Labubu.GroupByCriteria.Rarity);
+                var groupedData = _logic.GroupLabubu(Labubu.GroupByCriteria.Rarity);
                 DisplayGroupedData(groupedData, "редкости");
             }
             catch (InvalidOperationException ex)
@@ -219,7 +223,7 @@ namespace WinFormsApp
         {
             try
             {
-                var groupedData = logic.GroupLabubu(Labubu.GroupByCriteria.Size);
+                var groupedData = _logic.GroupLabubu(Labubu.GroupByCriteria.Size);
                 DisplayGroupedData(groupedData, "размеру");
             }
             catch (InvalidOperationException ex)
@@ -304,7 +308,7 @@ namespace WinFormsApp
         {
             try
             {
-                var mostExpensive = logic.FindMostLeastExpensiveLabubu(true);
+                var mostExpensive = _logic.FindMostLeastExpensiveLabubu(true);
                 HighlightLabubu(mostExpensive.ID);
 
                 MessageBox.Show($"Самая дорогая лабубу:\nID: {mostExpensive.ID}\nИмя: {mostExpensive.Name}\nЦена: {mostExpensive.Price:C}",
@@ -325,7 +329,7 @@ namespace WinFormsApp
         {
             try
             {
-                var cheapest = logic.FindMostLeastExpensiveLabubu(false);
+                var cheapest = _logic.FindMostLeastExpensiveLabubu(false);
                 HighlightLabubu(cheapest.ID);
 
                 MessageBox.Show($"Самая дешевая лабубу:\nID: {cheapest.ID}\nИмя: {cheapest.Name}\nЦена: {cheapest.Price:C}",
@@ -384,6 +388,11 @@ namespace WinFormsApp
             {
                 this.BackColor = SystemColors.Control;
             }
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            NinjectService.Dispose();
         }
     }
 }
