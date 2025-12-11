@@ -205,7 +205,7 @@ namespace WinFormsApp
         {
             try
             {
-                var groupedData = _logic.GroupLabubu(Labubu.GroupByCriteria.Rarity);
+                var groupedData = _logic.GroupLabubu(GroupByCriteria.Rarity);
                 DisplayGroupedData(groupedData, "редкости");
             }
             catch (InvalidOperationException ex)
@@ -223,7 +223,7 @@ namespace WinFormsApp
         {
             try
             {
-                var groupedData = _logic.GroupLabubu(Labubu.GroupByCriteria.Size);
+                var groupedData = _logic.GroupLabubu(GroupByCriteria.Size);
                 DisplayGroupedData(groupedData, "размеру");
             }
             catch (InvalidOperationException ex)
@@ -271,15 +271,15 @@ namespace WinFormsApp
         /// <summary>
         /// Преобразует RarityEnum в строку для отображения
         /// </summary>
-        private string RarityEnumToString(Labubu.RarityEnum rarity)
+        private string RarityEnumToString(RarityEnum rarity)
         {
             return rarity switch
             {
-                Labubu.RarityEnum.OneStar => "1*",
-                Labubu.RarityEnum.TwoStars => "2*",
-                Labubu.RarityEnum.ThreeStars => "3*",
-                Labubu.RarityEnum.FourStars => "4*",
-                Labubu.RarityEnum.FiveStars => "5*",
+                RarityEnum.OneStar => "1*",
+                RarityEnum.TwoStars => "2*",
+                RarityEnum.ThreeStars => "3*",
+                RarityEnum.FourStars => "4*",
+                RarityEnum.FiveStars => "5*",
                 _ => rarity.ToString()
             };
         }
@@ -287,14 +287,14 @@ namespace WinFormsApp
         /// <summary>
         /// Преобразует SizeEnum в строку для отображения
         /// </summary>
-        private string SizeEnumToString(Labubu.SizeEnum size)
+        private string SizeEnumToString(SizeEnum size)
         {
             return size switch
             {
-                Labubu.SizeEnum.Small => "Small",
-                Labubu.SizeEnum.Medium => "Medium",
-                Labubu.SizeEnum.Big => "Big",
-                Labubu.SizeEnum.HUGE => "HUGE",
+                SizeEnum.Small => "Small",
+                SizeEnum.Medium => "Medium",
+                SizeEnum.Big => "Big",
+                SizeEnum.HUGE => "HUGE",
                 _ => size.ToString()
             };
         }

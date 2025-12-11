@@ -143,8 +143,8 @@ namespace ConsoleApp
 
                     string newName = GetValidatedInput($"Введите новое имя (или нажмите Enter для '{existingLabubu.Name}'): ", true);
                     string newColor = GetValidatedInput($"Введите новый цвет (или нажмите Enter для '{existingLabubu.Color}'): ", true);
-                    Labubu.RarityEnum newRarity = GetValidRarityOptional(existingLabubu.Rarity);
-                    Labubu.SizeEnum newSize = GetValidSizeOptional(existingLabubu.Size);
+                    RarityEnum newRarity = GetValidRarityOptional(existingLabubu.Rarity);
+                    SizeEnum newSize = GetValidSizeOptional(existingLabubu.Size);
                     decimal newPrice = GetValidPriceOptional(existingLabubu.Price);
 
                     var updatedLabubu = new Labubu
@@ -182,12 +182,12 @@ namespace ConsoleApp
 
                     if (choice == "1")
                     {
-                        grouped = _logic.GroupLabubu(Labubu.GroupByCriteria.Rarity);
+                        grouped = _logic.GroupLabubu(GroupByCriteria.Rarity);
                         Console.WriteLine("Группировка по редкости");
                     }
                     else if (choice == "2")
                     {
-                        grouped = _logic.GroupLabubu(Labubu.GroupByCriteria.Size);
+                        grouped = _logic.GroupLabubu(GroupByCriteria.Size);
                         Console.WriteLine("Группировка по размеру");
                     }
                     else
@@ -308,7 +308,7 @@ namespace ConsoleApp
 
             return input?.Trim() ?? "";
         }
-        private static Labubu.RarityEnum GetValidRarity()
+        private static RarityEnum GetValidRarity()
         {
             while (true)
             {
@@ -323,12 +323,12 @@ namespace ConsoleApp
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out int rarityNum) && rarityNum >= 1 && rarityNum <= 5)
                 {
-                    return (Labubu.RarityEnum)rarityNum;
+                    return (RarityEnum)rarityNum;
                 }
                 Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 5.");
             }
         }
-        private static Labubu.SizeEnum GetValidSize()
+        private static SizeEnum GetValidSize()
         {
             while (true)
             {
@@ -342,7 +342,7 @@ namespace ConsoleApp
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out int sizeNum) && sizeNum >= 1 && sizeNum <= 4)
                 {
-                    return (Labubu.SizeEnum)(sizeNum - 1); 
+                    return (SizeEnum)(sizeNum - 1); 
                 }
                 Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 4.");
             }
@@ -369,7 +369,7 @@ namespace ConsoleApp
             }
         }
 
-        private static Labubu.RarityEnum GetValidRarityOptional(Labubu.RarityEnum currentRarity)
+        private static RarityEnum GetValidRarityOptional(RarityEnum currentRarity)
         {
             while (true)
             {
@@ -391,14 +391,14 @@ namespace ConsoleApp
 
                 if (int.TryParse(input, out int rarityNum) && rarityNum >= 1 && rarityNum <= 5)
                 {
-                    return (Labubu.RarityEnum)rarityNum;
+                    return (RarityEnum)rarityNum;
                 }
 
                 Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 5 или нажмите Enter.");
             }
         }
 
-        private static Labubu.SizeEnum GetValidSizeOptional(Labubu.SizeEnum currentSize)
+        private static SizeEnum GetValidSizeOptional(SizeEnum currentSize)
         {
             while (true)
             {
@@ -419,7 +419,7 @@ namespace ConsoleApp
 
                 if (int.TryParse(input, out int sizeNum) && sizeNum >= 1 && sizeNum <= 4)
                 {
-                    return (Labubu.SizeEnum)(sizeNum - 1);
+                    return (SizeEnum)(sizeNum - 1);
                 }
 
                 Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 4 или нажмите Enter.");

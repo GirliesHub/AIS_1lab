@@ -41,15 +41,15 @@ namespace WinFormsApp
         /// <summary>
         /// преобразует строку в RarityEnum
         /// </summary>
-        private Labubu.RarityEnum ParseRarity(string rarityString)
+        private RarityEnum ParseRarity(string rarityString)
         {
             return rarityString switch
             {
-                "1*" => Labubu.RarityEnum.OneStar,
-                "2*" => Labubu.RarityEnum.TwoStars,
-                "3*" => Labubu.RarityEnum.ThreeStars,
-                "4*" => Labubu.RarityEnum.FourStars,
-                "5*" => Labubu.RarityEnum.FiveStars,
+                "1*" => RarityEnum.OneStar,
+                "2*" => RarityEnum.TwoStars,
+                "3*" => RarityEnum.ThreeStars,
+                "4*" => RarityEnum.FourStars,
+                "5*" => RarityEnum.FiveStars,
                 _ => throw new ArgumentException($"Неизвестная редкость: {rarityString}")
             };
         }
@@ -57,14 +57,14 @@ namespace WinFormsApp
         /// <summary>
         /// преобразует строку в SizeEnum
         /// </summary>
-        private Labubu.SizeEnum ParseSize(string sizeString)
+        private SizeEnum ParseSize(string sizeString)
         {
             return sizeString.ToLower() switch
             {
-                "small" => Labubu.SizeEnum.Small,
-                "medium" => Labubu.SizeEnum.Medium,
-                "big" => Labubu.SizeEnum.Big,
-                "huge" => Labubu.SizeEnum.HUGE,
+                "small" => SizeEnum.Small,
+                "medium" => SizeEnum.Medium,
+                "big" => SizeEnum.Big,
+                "huge" => SizeEnum.HUGE,
                 _ => throw new ArgumentException($"Неизвестный размер: {sizeString}")
             };
         }
@@ -91,8 +91,8 @@ namespace WinFormsApp
                 return;
             }
 
-            Labubu.RarityEnum rarity = ParseRarity(cmbRarity.SelectedItem.ToString());
-            Labubu.SizeEnum size = ParseSize(cmbSizes.SelectedItem.ToString());
+            RarityEnum rarity = ParseRarity(cmbRarity.SelectedItem.ToString());
+            SizeEnum size = ParseSize(cmbSizes.SelectedItem.ToString());
 
             int number = logic.GetAllLabubus().Count;
 

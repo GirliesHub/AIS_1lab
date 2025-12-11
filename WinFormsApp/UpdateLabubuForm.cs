@@ -60,23 +60,23 @@ namespace WinFormsApp
 
             try
             {
-                Labubu.RarityEnum rarity = cmbRarity.SelectedItem.ToString() switch
+                RarityEnum rarity = cmbRarity.SelectedItem.ToString() switch
                 {
-                    "1*" => Labubu.RarityEnum.OneStar,
-                    "2*" => Labubu.RarityEnum.TwoStars,
-                    "3*" => Labubu.RarityEnum.ThreeStars,
-                    "4*" => Labubu.RarityEnum.FourStars,
-                    "5*" => Labubu.RarityEnum.FiveStars,
-                    _ => Labubu.RarityEnum.OneStar
+                    "1*" => RarityEnum.OneStar,
+                    "2*" => RarityEnum.TwoStars,
+                    "3*" => RarityEnum.ThreeStars,
+                    "4*" => RarityEnum.FourStars,
+                    "5*" => RarityEnum.FiveStars,
+                    _ => RarityEnum.OneStar
                 };
 
-                Labubu.SizeEnum size = cmbSize.SelectedItem.ToString().ToLower() switch
+                SizeEnum size = cmbSize.SelectedItem.ToString().ToLower() switch
                 {
-                    "small" => Labubu.SizeEnum.Small,
-                    "medium" => Labubu.SizeEnum.Medium,
-                    "big" => Labubu.SizeEnum.Big,
-                    "huge" => Labubu.SizeEnum.HUGE,
-                    _ => Labubu.SizeEnum.Small
+                    "small" => SizeEnum.Small,
+                    "medium" => SizeEnum.Medium,
+                    "big" => SizeEnum.Big,
+                    "huge" => SizeEnum.HUGE,
+                    _ => SizeEnum.Small
                 };
 
                 logic.UpdateLabubu(id, textName.Text, textColor.Text, rarity, size, price);
@@ -127,11 +127,11 @@ namespace WinFormsApp
 
                 string rarityString = labubu.Rarity switch
                 {
-                    Labubu.RarityEnum.OneStar => "1*",
-                    Labubu.RarityEnum.TwoStars => "2*",
-                    Labubu.RarityEnum.ThreeStars => "3*",
-                    Labubu.RarityEnum.FourStars => "4*",
-                    Labubu.RarityEnum.FiveStars => "5*",
+                    RarityEnum.OneStar => "1*",
+                    RarityEnum.TwoStars => "2*",
+                    RarityEnum.ThreeStars => "3*",
+                    RarityEnum.FourStars => "4*",
+                    RarityEnum.FiveStars => "5*",
                     _ => "1*"
                 };
                 cmbRarity.SelectedItem = rarityString;

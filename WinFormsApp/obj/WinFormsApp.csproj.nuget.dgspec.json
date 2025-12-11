@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\WinFormsApp\\WinFormsApp.csproj": {}
+    "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\BusinessLogic\\BusinessLogic.csproj": {
+    "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\BusinessLogic\\BusinessLogic.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\BusinessLogic\\BusinessLogic.csproj",
+        "projectUniqueName": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\BusinessLogic\\BusinessLogic.csproj",
         "projectName": "BusinessLogic",
-        "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\BusinessLogic\\BusinessLogic.csproj",
-        "packagesPath": "C:\\Users\\Вероника\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\BusinessLogic\\obj\\",
+        "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\BusinessLogic\\BusinessLogic.csproj",
+        "packagesPath": "C:\\Users\\lonit\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\BusinessLogic\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Вероника\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lonit\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,11 +32,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj": {
-                "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj"
+              "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj": {
+                "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj"
               },
-              "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj": {
-                "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj"
+              "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj": {
+                "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj"
               }
             }
           }
@@ -49,7 +49,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -90,24 +90,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj": {
+    "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj",
+        "projectUniqueName": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj",
         "projectName": "DataAccessLayer",
-        "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj",
-        "packagesPath": "C:\\Users\\Вероника\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\obj\\",
+        "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj",
+        "packagesPath": "C:\\Users\\lonit\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Вероника\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lonit\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -122,8 +122,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj": {
-                "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj"
+              "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj": {
+                "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj"
               }
             }
           }
@@ -136,7 +136,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -185,24 +185,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj": {
+    "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj",
+        "projectUniqueName": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj",
         "projectName": "Model",
-        "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj",
-        "packagesPath": "C:\\Users\\Вероника\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\obj\\",
+        "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj",
+        "packagesPath": "C:\\Users\\lonit\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Вероника\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lonit\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -227,7 +227,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -276,24 +276,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\WinFormsApp\\WinFormsApp.csproj": {
+    "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\WinFormsApp\\WinFormsApp.csproj",
+        "projectUniqueName": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj",
         "projectName": "WinFormsApp",
-        "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\WinFormsApp\\WinFormsApp.csproj",
-        "packagesPath": "C:\\Users\\Вероника\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\WinFormsApp\\obj\\",
+        "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\WinFormsApp\\WinFormsApp.csproj",
+        "packagesPath": "C:\\Users\\lonit\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\WinFormsApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Вероника\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lonit\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -308,14 +308,14 @@
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\BusinessLogic\\BusinessLogic.csproj": {
-                "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\BusinessLogic\\BusinessLogic.csproj"
+              "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\BusinessLogic\\BusinessLogic.csproj": {
+                "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\BusinessLogic\\BusinessLogic.csproj"
               },
-              "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj": {
-                "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\DataAccessLayer\\DataAccessLayer.csproj"
+              "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj": {
+                "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\DataAccessLayer.csproj"
               },
-              "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj": {
-                "projectPath": "C:\\Users\\Вероника\\OneDrive\\Рабочий стол\\AIS_LABA_1\\Model\\Model.csproj"
+              "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj": {
+                "projectPath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\Model\\Model.csproj"
               }
             }
           }
@@ -328,7 +328,7 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
         "SdkAnalysisLevel": "9.0.100"
       },
@@ -384,7 +384,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

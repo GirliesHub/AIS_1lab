@@ -73,15 +73,15 @@ namespace BusinessLogic
         /// <summary>
         /// Группирует лабубы по критерию
         /// </summary>
-        public Dictionary<string, List<Labubu>> GroupLabubu(Labubu.GroupByCriteria criteria)
+        public Dictionary<string, List<Labubu>> GroupLabubu(GroupByCriteria criteria)
         {
             var all = _repository.GetAll();
             return criteria switch
             {
-                Labubu.GroupByCriteria.Rarity =>
+                GroupByCriteria.Rarity =>
                     all.GroupBy(x => x.Rarity.ToString())
                        .ToDictionary(g => g.Key, g => g.ToList()),
-                Labubu.GroupByCriteria.Size =>
+                GroupByCriteria.Size =>
                     all.GroupBy(x => x.Size.ToString())
                        .ToDictionary(g => g.Key, g => g.ToList()),
                 _ => throw new ArgumentException("Unknown criteria")
@@ -118,7 +118,7 @@ namespace BusinessLogic
         /// <param name="rarity"></param>
         /// <param name="size"></param>
         /// <param name="price"></param>
-        public void UpdateLabubu(int id, string name, string color, Labubu.RarityEnum rarity, Labubu.SizeEnum size, decimal price)
+        public void UpdateLabubu(int id, string name, string color, RarityEnum rarity, SizeEnum size, decimal price)
         {
             var labubu = new Labubu
             {

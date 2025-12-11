@@ -30,28 +30,29 @@ namespace Model
             Price = price;
         }
 
-        public enum GroupByCriteria
-        {
-            Rarity,
-            Size
-        }
 
-        public enum RarityEnum
-        {
-            OneStar = 1,
-            TwoStars = 2,
-            ThreeStars = 3,
-            FourStars = 4,
-            FiveStars = 5
-        }
+    }
+    public enum GroupByCriteria
+    {
+        Rarity,
+        Size
+    }
 
-        public enum SizeEnum
-        {
-            Small,
-            Medium,
-            Big,
-            HUGE
-        }
+    public enum RarityEnum
+    {
+        OneStar = 1,
+        TwoStars = 2,
+        ThreeStars = 3,
+        FourStars = 4,
+        FiveStars = 5
+    }
+
+    public enum SizeEnum
+    {
+        Small,
+        Medium,
+        Big,
+        HUGE
     }
 
 }
