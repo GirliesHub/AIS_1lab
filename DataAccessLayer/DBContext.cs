@@ -1,7 +1,9 @@
-﻿using System.Data.Entity;
-using Model;
+﻿using LabubuModel;
+using System.Data.Entity;
+using Shared;
 
-namespace DataAccessLayer
+
+namespace Model.DataAccessLayer
 {
     public class DBContext : DbContext
     {

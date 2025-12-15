@@ -1,5 +1,3 @@
-using Model;
-using BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,17 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Shared;
+using LabubuModel;
 
 namespace WinFormsApp
 {
     public partial class AddLabubuForm : Form
     {
+        public event EventHandler<ViewLabubuAddEventArgs> LabubuAddedOnAddForm = delegate { };
 
-        private Logic logic;
-        public AddLabubuForm(Logic logic)
+        public Labubu Labubu { get; private set; }
+
+        public AddLabubuForm()
         {
             InitializeComponent();
-            this.logic = logic;
             InitializeComboBoxes();
         }
 
@@ -32,7 +33,6 @@ namespace WinFormsApp
         {
             cmbRarity.Items.Clear();
             cmbRarity.Items.AddRange(new string[] { "1*", "2*", "3*", "4*", "5*" });
-
 
             cmbSizes.Items.Clear();
             cmbSizes.Items.AddRange(new string[] { "small", "medium", "big", "HUGE" });
@@ -72,8 +72,6 @@ namespace WinFormsApp
         /// <summary>
         /// кнопка добавить лабубу
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string name = txtName.Text;
@@ -94,8 +92,6 @@ namespace WinFormsApp
             RarityEnum rarity = ParseRarity(cmbRarity.SelectedItem.ToString());
             SizeEnum size = ParseSize(cmbSizes.SelectedItem.ToString());
 
-            int number = logic.GetAllLabubus().Count;
-
             if (!decimal.TryParse(txtPrice.Text, out decimal price) || price <= 0)
             {
                 MessageBox.Show("Введите корректную цену (должна быть положительной)!");
@@ -110,49 +106,30 @@ namespace WinFormsApp
 
             try
             {
-                var labubu = new Labubu
-                {
-                    Name = txtName.Text,
-                    Color = txtColor.Text,
-                    Rarity = ParseRarity(cmbRarity.SelectedItem.ToString()),
-                    Size = ParseSize(cmbSizes.SelectedItem.ToString()),
-                    Price = decimal.Parse(txtPrice.Text)
-                };
+                LabubuAddedOnAddForm(this, new ViewLabubuAddEventArgs(name, color, rarity, size, price));
+                MessageBox.Show("добавили походу");
+                //Labubu = new Labubu
+                //{
+                //    Name = name,
+                //    Color = color,
+                //    Rarity = rarity,
+                //    Size = size,
+                //    Price = price
+                //};
 
-                logic.AddLabubu(labubu); 
-                MessageBox.Show("Лабуба добавлена.");
-                this.Close();
+                DialogResult = DialogResult.OK;
+                Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при добавлении: {ex.Message}");
+                MessageBox.Show($"Ошибка при создании лабубы: {ex.Message}");
             }
-
         }
 
-       /// <summary>
-       /// Обработчики событий
-       /// </summary>
-       /// <param name="sender"></param>
-       /// <param name="e"></param>
-        private void label1_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtPrice_TextChanged(object sender, EventArgs e)
-        {
-
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

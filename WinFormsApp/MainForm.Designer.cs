@@ -31,7 +31,7 @@ namespace WinFormsApp
         private void InitializeComponent()
         {
             btnAddLabubu = new Button();
-            btnRemoveLabubu = new Button();
+            btnDeleteLabubu = new Button();
             btnUpdateLabubu = new Button();
             listViewLabubus = new ListView();
             txtSearch = new TextBox();
@@ -56,15 +56,15 @@ namespace WinFormsApp
             btnAddLabubu.UseVisualStyleBackColor = true;
             btnAddLabubu.Click += btnAddLabubu_Click;
             // 
-            // btnRemoveLabubu
+            // btnDeleteLabubu
             // 
-            btnRemoveLabubu.Location = new Point(619, 195);
-            btnRemoveLabubu.Name = "btnRemoveLabubu";
-            btnRemoveLabubu.Size = new Size(119, 23);
-            btnRemoveLabubu.TabIndex = 1;
-            btnRemoveLabubu.Text = "Удалить лабубу";
-            btnRemoveLabubu.UseVisualStyleBackColor = true;
-            btnRemoveLabubu.Click += btnRemoveLabubu_Click;
+            btnDeleteLabubu.Location = new Point(619, 195);
+            btnDeleteLabubu.Name = "btnRemoveLabubu";
+            btnDeleteLabubu.Size = new Size(119, 23);
+            btnDeleteLabubu.TabIndex = 1;
+            btnDeleteLabubu.Text = "Удалить лабубу";
+            btnDeleteLabubu.UseVisualStyleBackColor = true;
+            btnDeleteLabubu.Click += btnDeleteLabubu_Click;
             // 
             // btnUpdateLabubu
             // 
@@ -84,7 +84,6 @@ namespace WinFormsApp
             listViewLabubus.Size = new Size(535, 154);
             listViewLabubus.TabIndex = 3;
             listViewLabubus.UseCompatibleStateImageBehavior = false;
-            listViewLabubus.SelectedIndexChanged += listViewLabubus_SelectedIndexChanged;
             // 
             // txtSearch
             // 
@@ -194,7 +193,7 @@ namespace WinFormsApp
             Controls.Add(txtSearch);
             Controls.Add(listViewLabubus);
             Controls.Add(btnUpdateLabubu);
-            Controls.Add(btnRemoveLabubu);
+            Controls.Add(btnDeleteLabubu);
             Controls.Add(btnAddLabubu);
             Name = "MainForm";
             Text = "Мир Лабуб";
@@ -207,7 +206,7 @@ namespace WinFormsApp
         #endregion
 
         private Button btnAddLabubu;
-        private Button btnRemoveLabubu;
+        private Button btnDeleteLabubu;
         private Button btnUpdateLabubu;
         private ListView listViewLabubus;
         private TextBox txtSearch;

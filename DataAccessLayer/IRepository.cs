@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer
+namespace Model.DataAccessLayer
 {
     public interface IRepository<T> 
     {
@@ -37,6 +37,6 @@ namespace DataAccessLayer
         /// Удаляет сущность из базы данных по её идентификатору.
         /// </summary>
         /// <param name="id">Идентификатор сущности для удаления.</param>
-        void Remove(int id);
+        void Delete(int id);
     }
 }

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model;
+using DataAccessLayer;
+using LabubuModel;
+
 /// <summary>
 /// Entity репозиторий
 /// /<summary>
-namespace DataAccessLayer
+namespace Model.DataAccessLayer
 {
-    public class EntityRepository<T> : IRepository<T> where T : class, IDomainObject
+    public class EntityRepository : ILabubuRepository
     {
         private readonly DBContext _context;
 
@@ -23,25 +25,25 @@ namespace DataAccessLayer
             _context = new DBContext(connectionString);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<Labubu> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return _context.Set<Labubu>().ToList();
         }
 
-        public T Get(int id)
+        public Labubu Get(int id)
         {
-            return _context.Set<T>().Find(id);
+            return _context.Set<Labubu>().Find(id);
         }
 
-        public void Create(T entity)
+        public void Create(Labubu entity)
         {
-            _context.Set<T>().Add(entity);
+            _context.Set<Labubu>().Add(entity);
             _context.SaveChanges();
         }
 
-        public void Update(T entity)
+        public void Update(Labubu entity)
         {
-            var existing = _context.Set<T>().Find((entity as IDomainObject)?.ID);
+            var existing = _context.Set<Labubu>().Find((entity as IDomainObject)?.ID);
             if (existing != null)
             {
                 _context.Entry(existing).CurrentValues.SetValues(entity);
@@ -49,12 +51,12 @@ namespace DataAccessLayer
             }
         }
 
-        public void Remove(int id)
+        public void Delete(int id)
         {
-            var entity = _context.Set<T>().Find(id);
+            var entity = _context.Set<Labubu>().Find(id);
             if (entity != null)
             {
-                _context.Set<T>().Remove(entity);
+                _context.Set<Labubu>().Remove(entity);
                 _context.SaveChanges();
             }
         }

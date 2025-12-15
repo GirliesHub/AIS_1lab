@@ -1,43 +1,46 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Model;
+using Shared;
+using LabubuModel;
+using DataAccessLayer;
 
-namespace DataAccessLayer 
+
+namespace Model.DataAccessLayer
 {
     /// <summary>
     /// Слой доступа к данным
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EFRepository<T> : IRepository<T>
-        where T : class, IDomainObject
+    public class EFRepository: ILabubuRepository
     {
         private readonly DBContext _context;
-        private readonly DbSet<T> _set;
+
+        private readonly DbSet<Labubu> _set;
 
         public EFRepository()
         {
             _context = new DBContext();
-            _set = _context.Set<T>();
+            _set = _context.Set<Labubu>();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<Labubu> GetAll()
         {
             return _set.ToList();
         }
 
-        public T Get(int id)
+        public Labubu Get(int id)
         {
             return _set.Find(id);
         }
 
-        public void Create(T entity)
+        public void Create(Labubu entity)
         {
             _set.Add(entity);
             _context.SaveChanges();
         }
 
-        public void Update(T entity)
+        public void Update(Labubu entity)
         {
             var existing = _set.Find((entity as IDomainObject)?.ID);
             if (existing != null)
@@ -47,7 +50,7 @@ namespace DataAccessLayer
             }
         }
 
-        public void Remove(int id)
+        public void Delete(int id)
         {
             var item = _set.Find(id);
             if (item != null)

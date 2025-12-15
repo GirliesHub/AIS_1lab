@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace ConsoleApp
 {
-    public interface IDomainObject
+    public interface IUserInterface
     {
-        int ID { get; set; }
+        void Start();
+
     }
 }
-

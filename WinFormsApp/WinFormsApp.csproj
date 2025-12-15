@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+	<TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -16,12 +16,14 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
     <PackageReference Include="Ninject" Version="3.3.6" />
+    <PackageReference Include="Npgsql" Version="6.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+    <ProjectReference Include="..\LabubuModel\LabubuModel.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\Presenter\Presenter.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,293 +1,233 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Model;
-using BusinessLogic;
-using DataAccessLayer;
-using BusinessLogic.BusinessLogic;
+using LabubuModel;
+using Shared;
+using Ninject;
 
-
-namespace ConsoleApp 
+namespace ConsoleApp
 {
-    public class Program
+    public class Program : ILabubuView
     {
-        static Logic _logic;
-        static void Main(string[] args)
-        {
-            NinjectService.Initialize();
-            _logic = NinjectService.Get<Logic>();
 
-            bool exit = false;
-            while (!exit)
+        // Events 
+        public event EventHandler<ViewLabubuAddEventArgs> EventViewLabubuAdd = delegate { };
+        public event EventHandler<ViewLabubuSelectEventArgs> EventViewLabubuDelete = delegate { };
+        public event EventHandler<ViewLabubuUpdateEventArgs> EventViewLabubuUpdate = delegate { };
+        public event EventHandler<ViewLabubuLoadListEventArgs> EventViewLabubuLoadList = delegate { };
+        public event EventHandler<ViewLabubuGroupEventArgs> EventViewLabubuGroup = delegate { };
+        public event EventHandler<ViewLabubuPriceEventArgs> EventViewLabubuPrice = delegate { };
+        private List<Labubu> _labubus;
+
+        public Program()
+        {
+            _labubus = new List<Labubu>();
+        }
+
+        public void Run()
+        {
+            string command;
+            do
             {
                 Console.Clear();
-                Console.WriteLine("Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ РњРёСЂ Р›Р°Р±СѓР±! Р§С‚Рѕ РІС‹ С…РѕС‚РёС‚Рµ СЃРґРµР»Р°С‚СЊ?");
-                Console.WriteLine("1. Р”РѕР±Р°РІРёС‚СЊ Р»Р°Р±СѓР±Сѓ \n 2. РЈРґР°Р»РёС‚СЊ Р»Р°Р±СѓР±Сѓ \n 3. РР·РјРµРЅРёС‚СЊ Р»Р°Р±СѓР±Сѓ \n 4. РЎРіСЂСѓРїРїРёСЂРѕРІР°С‚СЊ Р»Р°Р±СѓР± РїРѕ РїСЂРёР·РЅР°РєСѓ \n 5. РџРѕРєР°Р·Р°С‚СЊ СЃРїРёСЃРѕРє РІСЃРµС… Р»Р°Р±СѓР± \n 6. РќР°Р№С‚Рё СЃР°РјСѓСЋ РґРѕСЂРѕРіСѓСЋ/РґРµС€РµРІСѓСЋ Р»Р°Р±СѓР±Сѓ \n 0. Р’С‹С…РѕРґ");
-                Console.WriteLine("Р’С‹Р±РµСЂРёС‚Рµ РЅРѕРјРµСЂ: ");
-                string number = Console.ReadLine();
-                switch (number)
+                Console.WriteLine("Добро пожаловать в Мир Лабуб! Что вы хотите сделать?");
+                Console.WriteLine("1. Добавить лабубу \n 2. Удалить лабубу \n 3. Изменить лабубу \n 4. Сгруппировать лабуб по признаку \n 5. Показать список всех лабуб \n 6. Найти самую дорогую/дешевую лабубу \n 0. Выход");
+                Console.WriteLine("Выберите номер: ");
+                command = Console.ReadLine();
+
+                switch (command)
                 {
                     case "1":
                         Console.Clear();
-                        AddLabubu();
+                        CheckAddLabubu();
                         break;
                     case "2":
                         Console.Clear();
-                        RemoveLabubu();
+                        CheckDeleteLabubu();
                         break;
                     case "3":
                         Console.Clear();
-                        UpdateLabubu();
+                        CheckUpdateLabubu();
                         break;
                     case "4":
                         Console.Clear();
-                        GroupLabubu();
+                        CheckGroupLabubu();
                         break;
                     case "5":
                         Console.Clear();
-                        GetAllLabubus();
+                        EventViewLabubuLoadList(this, new());
                         break;
                     case "6":
                         Console.Clear();
-                        FindMostLeastExpensiveLabubu();
+                        CheckPriceLabubu();
                         break;
                     case "0":
                         Console.Clear();
-                        Console.WriteLine("РЎРїР°СЃРёР±Рѕ, С‡С‚Рѕ Р·Р°С‚РµСЃС‚РёР»Рё РњРёСЂ Р›Р°Р±СѓР±! Р”Рѕ СЃРєРѕСЂРѕРіРѕ!");
-                        exit = true;
+                        Console.WriteLine("Спасибо, что затестили Мир Лабуб! До скорого!");
+                        Environment.Exit(0);
                         break;
                     default:
                         Console.Clear();
-                        Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІС‹Р±РѕСЂ, РїРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·");
+                        Console.WriteLine("Неверный выбор, попробуйте еще раз");
                         Console.ReadKey();
                         break;
-
                 }
-                Console.ReadKey();
-            }
-            /// <summary>
-            /// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ Р»Р°Р±СѓР±С‹ С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ
-            /// </summary>>
-            static void AddLabubu()
+
+            } while (command != "exit");
+        }
+
+        private void CheckAddLabubu()
+        {
+            Console.Write("Имя: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Цвет: ");
+            string color = Console.ReadLine();
+
+            var rarity = GetValidRarity();
+            var size = GetValidSize();
+            var price = GetValidPrice();
+
+            EventViewLabubuAdd(this,
+                new ViewLabubuAddEventArgs(name, color, rarity, size, price));
+        }
+
+        public void AddLabubu(Labubu labubu)
+        {
+            Console.WriteLine("Лабуба успешно добавлена!");
+            return;
+        }
+
+
+        private void CheckDeleteLabubu()
+        {
+            EventViewLabubuLoadList(this, new());
+            Console.Write("Введите ID: ");
+            if (int.TryParse(Console.ReadLine(), out int id))
+                EventViewLabubuDelete(this, new(id));
+        }
+
+        public void DeleteLabubu(int id)
+        {
+            Console.WriteLine("Лабуба удалена!");
+        }
+
+
+        private void CheckUpdateLabubu()
+        {
+            EventViewLabubuLoadList(this, new());
+
+            Console.Write("ID для изменения: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+                return;
+
+            var current = _labubus.FirstOrDefault(l => l.ID == id);
+            if (current == null)
             {
-                try
-                {
-                    Console.WriteLine("\nР”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ Р»Р°Р±СѓР±С‹");
-
-                    var labubu = new Labubu
-                    {
-                        Name = GetValidatedInput("Р’РІРµРґРёС‚Рµ РёРјСЏ: ", false),
-                        Color = GetValidatedInput("Р’РІРµРґРёС‚Рµ С†РІРµС‚: ", false),
-                        Rarity = GetValidRarity(),
-                        Size = GetValidSize(),
-                        Price = GetValidPrice()
-                    };
-
-                    _logic.AddLabubu(labubu);
-                    Console.WriteLine("Р›Р°Р±СѓР±Р° СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅР°!");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"РћС€РёР±РєР°: {ex.Message}");
-                }
+                Console.WriteLine("Не найдено");
+                return;
             }
-            /// <summary>
-            /// Р¤СѓРЅРєС†РёСЏ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ Р»Р°Р±СѓР±С‹ С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ
-            /// </summary>>
-            static void RemoveLabubu()
-            {
-                try
-                {
-                    Console.WriteLine("РЈРґР°Р»РµРЅРёРµ Р»Р°Р±СѓР±С‹");
-                    GetAllLabubus();
-                    Console.Write("Р’РІРµРґРёС‚Рµ ID Р»Р°Р±СѓР±С‹ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ: ");
-                    int id = int.Parse(Console.ReadLine());
 
-                    _logic.RemoveLabubu(id);
-                    Console.WriteLine("Р›Р°Р±СѓР±Р° СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅР°!");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"РћС€РёР±РєР°: {ex.Message}");
-                }
+            Console.Write($"Имя ({current.Name}): ");
+            string name = Console.ReadLine();
+            name = string.IsNullOrWhiteSpace(name) ? current.Name : name;
+
+            Console.Write($"Цвет ({current.Color}): ");
+            string color = Console.ReadLine();
+            color = string.IsNullOrWhiteSpace(color) ? current.Color : color;
+
+            var rarity = GetValidRarityOptional(current.Rarity);
+            var size = GetValidSizeOptional(current.Size);
+            var price = GetValidPriceOptional(current.Price);
+
+            EventViewLabubuUpdate(this,
+                new ViewLabubuUpdateEventArgs(
+                    new Labubu { ID = id, Name = name, Color = color, Rarity = rarity, Size = size, Price = price }
+                ));
+        }
+
+        public void UpdateLabubu(Labubu labubu)
+        {
+            Console.WriteLine("Лабуба обновлена!");
+        }
+
+        public void LoadLabubus(List<Labubu> labubus)
+        {
+            _labubus = labubus;
+
+            if (_labubus.Count == 0)
+            {
+                Console.WriteLine("Лабуб нет");
+                return;
             }
-            /// <summary>
-            /// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ Р»Р°Р±СѓР±С‹ С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ
-            /// </summary>>
-            static void UpdateLabubu()
+
+            foreach (var l in _labubus)
             {
-                try
-                {
-                    Console.WriteLine("РР·РјРµРЅРµРЅРёРµ Р»Р°Р±СѓР±С‹");
-                    GetAllLabubus();
-                    Console.Write("Р’РІРµРґРёС‚Рµ ID Р»Р°Р±СѓР±С‹ РґР»СЏ РёР·РјРµРЅРµРЅРёСЏ: ");
-                    int id = int.Parse(Console.ReadLine());
-
-                    var existingLabubu = _logic.GetLabubuById(id);
-                    if (existingLabubu == null)
-                    {
-                        Console.WriteLine($"Р›Р°Р±СѓР±Р° СЃ ID {id} РЅРµ РЅР°Р№РґРµРЅР°!");
-                        return;
-                    }
-
-                    Console.WriteLine($"\nР РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р»Р°Р±СѓР±С‹ ID: {id}");
-                    Console.WriteLine($"РўРµРєСѓС‰РµРµ РёРјСЏ: {existingLabubu.Name}");
-                    Console.WriteLine($"РўРµРєСѓС‰РёР№ С†РІРµС‚: {existingLabubu.Color}");
-                    Console.WriteLine($"РўРµРєСѓС‰Р°СЏ СЂРµРґРєРѕСЃС‚СЊ: {existingLabubu.Rarity}");
-                    Console.WriteLine($"РўРµРєСѓС‰РёР№ СЂР°Р·РјРµСЂ: {existingLabubu.Size}");
-                    Console.WriteLine($"РўРµРєСѓС‰Р°СЏ С†РµРЅР°: {existingLabubu.Price}");
-
-                    string newName = GetValidatedInput($"Р’РІРµРґРёС‚Рµ РЅРѕРІРѕРµ РёРјСЏ (РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter РґР»СЏ '{existingLabubu.Name}'): ", true);
-                    string newColor = GetValidatedInput($"Р’РІРµРґРёС‚Рµ РЅРѕРІС‹Р№ С†РІРµС‚ (РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter РґР»СЏ '{existingLabubu.Color}'): ", true);
-                    RarityEnum newRarity = GetValidRarityOptional(existingLabubu.Rarity);
-                    SizeEnum newSize = GetValidSizeOptional(existingLabubu.Size);
-                    decimal newPrice = GetValidPriceOptional(existingLabubu.Price);
-
-                    var updatedLabubu = new Labubu
-                    {
-                        ID = id,
-                        Name = string.IsNullOrWhiteSpace(newName) ? existingLabubu.Name : newName,
-                        Color = string.IsNullOrWhiteSpace(newColor) ? existingLabubu.Color : newColor,
-                        Rarity = newRarity,
-                        Size = newSize,
-                        Price = newPrice
-                    };
-
-                    _logic.UpdateLabubu(updatedLabubu); 
-                    Console.WriteLine("Р›Р°Р±СѓР±Р° СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅР°!");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"РћС€РёР±РєР°: {ex.Message}");
-                }
+                Console.WriteLine(
+                    $"ID: {l.ID}, " +
+                    $"Имя: {l.Name}, " +
+                    $"Цвет: {l.Color}, " +
+                    $"Редкость: {l.Rarity}, " +
+                    $"Размер: {l.Size}, " +
+                    $"Цена: {l.Price:F2}");
             }
-            /// <summary>
-            /// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РіСЂСѓРїРїРёСЂРѕРІРєРё Р»Р°Р±СѓР± С‡РµСЂРµР· РєРѕРЅСЃРѕР»СЊ
-            /// </summary>>
-            static void GroupLabubu()
+        }
+
+
+        private void CheckGroupLabubu()
+        {
+            Console.WriteLine("1.Rarity  2.Size");
+            string c = Console.ReadLine();
+            EventViewLabubuGroup(this,
+                new ViewLabubuGroupEventArgs(c == "1" ? GroupByCriteria.Rarity : GroupByCriteria.Size));
+        }
+
+        public void ShowGroupedData(Dictionary<string, List<Labubu>> data, string criteria)
+        {
+            Console.WriteLine($"\nГруппировка по: {criteria}");
+
+            foreach (var group in data)
             {
-                try
+                Console.WriteLine($"\n{group.Key}:");
+                foreach (var labubu in group.Value)
                 {
-                    Console.WriteLine("Р“СЂСѓРїРїРёСЂРѕРІРєР° Р»Р°Р±СѓР±");
-                    Console.WriteLine("1. РџРѕ СЂРµРґРєРѕСЃС‚Рё");
-                    Console.WriteLine("2. РџРѕ СЂР°Р·РјРµСЂСѓ");
-                    Console.Write("Р’С‹Р±РµСЂРёС‚Рµ РєСЂРёС‚РµСЂРёР№: ");
-
-                    string choice = Console.ReadLine();
-                    Dictionary<string, List<Labubu>> grouped;
-
-                    if (choice == "1")
-                    {
-                        grouped = _logic.GroupLabubu(GroupByCriteria.Rarity);
-                        Console.WriteLine("Р“СЂСѓРїРїРёСЂРѕРІРєР° РїРѕ СЂРµРґРєРѕСЃС‚Рё");
-                    }
-                    else if (choice == "2")
-                    {
-                        grouped = _logic.GroupLabubu(GroupByCriteria.Size);
-                        Console.WriteLine("Р“СЂСѓРїРїРёСЂРѕРІРєР° РїРѕ СЂР°Р·РјРµСЂСѓ");
-                    }
-                    else
-                    {
-                        Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІС‹Р±РѕСЂ, РїРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·");
-                        return;
-                    }
-
-                    foreach (var group in grouped)
-                    {
-                        Console.WriteLine($"\n{group.Key}:");
-                        foreach (var labubu in group.Value)
-                        {
-                            Console.WriteLine($"  ID: {labubu.ID}, РРјСЏ: {labubu.Name}, Р¦РІРµС‚: {labubu.Color}, Р Р°Р·РјРµСЂ: {labubu.Size}, Р¦РµРЅР°: {labubu.Price}");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"РћС€РёР±РєР°: {ex.Message}");
-                }
-            }
-            ///<summary>
-            ///РњРµС‚РѕРґ, РІРѕР·РІСЂР°С‰Р°СЋС‰РёР№ СЃРїРёСЃРѕРє РІСЃРµС… Р»Р°Р±СѓР±
-            ///</summary>>
-            static void GetAllLabubus()
-            {
-                try
-                {
-                    Console.WriteLine("РЎРїРёСЃРѕРє РІСЃРµС… Р»Р°Р±СѓР±");
-                    var allLabubus = _logic.GetAllLabubus();
-
-                    if (allLabubus.Count == 0)
-                    {
-                        Console.WriteLine("Р›Р°Р±СѓР± РЅРµС‚ РІ СЃРїРёСЃРєРµ");
-                        return;
-                    }
-
-                    foreach (var labubu in allLabubus)
-                    {
-                        Console.WriteLine($"ID: {labubu.ID}");
-                        Console.WriteLine($"РРјСЏ: {labubu.Name}");
-                        Console.WriteLine($"Р¦РІРµС‚: {labubu.Color}");
-                        Console.WriteLine($"Р РµРґРєРѕСЃС‚СЊ: {labubu.Rarity}");
-                        Console.WriteLine($"Р Р°Р·РјРµСЂ: {labubu.Size}");
-                        Console.WriteLine($"Р¦РµРЅР°: {labubu.Price:C}");
-                        Console.WriteLine();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"РћС€РёР±РєР°: {ex.Message}");
-                }
-            }
-            ///<summary>
-            ///РњРµС‚РѕРґ, РёС‰СѓС‰РёР№ СЃР°РјСѓСЋ РґРѕСЂРѕРіСѓСЋ/РґРµС€РµРІСѓСЋ Р»Р°Р±СѓР±Сѓ
-            ///</summary>
-            static void FindMostLeastExpensiveLabubu()
-            {
-                try
-                {
-                    Console.WriteLine("РџРѕРёСЃРє Р»Р°Р±СѓР±С‹ РїРѕ С†РµРЅРµ. РљР°РєСѓСЋ Р»Р°Р±СѓР±Сѓ РЅР°Р№С‚Рё?");
-                    Console.WriteLine("1. РЎР°РјСѓСЋ РґРµС€РµРІСѓСЋ");
-                    Console.WriteLine("2. РЎР°РјСѓСЋ РґРѕСЂРѕРіСѓСЋ");
-                    Console.Write("Р’С‹Р±РµСЂРёС‚Рµ РІР°СЂРёР°РЅС‚: ");
-
-                    string option = Console.ReadLine();
-
-                    switch (option)
-                    {
-                        case "1":
-                            var cheapestLabubu = _logic.FindMostLeastExpensiveLabubu(false);
-                            Console.WriteLine($"РЎР°РјР°СЏ РґРµС€РµРІР°СЏ Р»Р°Р±СѓР±Р°: {cheapestLabubu.Name} - {cheapestLabubu.Price} СЂСѓР±.");
-                            break;
-                        case "2":
-                            var mostExpensiveLabubu = _logic.FindMostLeastExpensiveLabubu(true);
-                            Console.WriteLine($"РЎР°РјР°СЏ РґРѕСЂРѕРіР°СЏ Р»Р°Р±СѓР±Р°: {mostExpensiveLabubu.Name} - {mostExpensiveLabubu.Price} СЂСѓР±.");
-                            break;
-                        default:
-                            Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІС‹Р±РѕСЂ");
-                            break;
-                    }
-                }
-                catch (InvalidOperationException ex)
-                {
-                    Console.WriteLine($"{ex.Message}");
-                    Console.WriteLine("РЎРЅР°С‡Р°Р»Р° РґРѕР±Р°РІСЊС‚Рµ Р»Р°Р±СѓР± С‡РµСЂРµР· РјРµРЅСЋ (РѕРїС†РёСЏ 1)");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"РћС€РёР±РєР°: {ex.Message}");
+                    Console.WriteLine(
+                        $"  ID: {labubu.ID}, " +
+                        $"Имя: {labubu.Name}, " +
+                        $"Цена: {labubu.Price:F2}");
                 }
             }
         }
-       /// <summary>
-       /// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕРіРѕ РІРІРѕРґР° Р·РЅР°С‡РµРЅРёР№
-       /// </summary>
-       /// <param name="prompt"></param>
-       /// <param name="allowEmpty"></param>
-       /// <returns></returns>
+
+        private void CheckPriceLabubu()
+        {
+            Console.WriteLine("1.Дешёвая  2.Дорогая");
+            string c = Console.ReadLine();
+            EventViewLabubuPrice(this, new(c == "2"));
+        }
+
+        public void ShowLabubuPrice(Labubu labubu, bool isMostExpensive)
+        {
+            if (labubu == null)
+            {
+                Console.WriteLine("Лабубы не найдены");
+                return;
+            }
+
+            string text = isMostExpensive
+                ? "Самая дорогая лабуба"
+                : "Самая дешёвая лабуба";
+
+            Console.WriteLine(
+                $"{text}: {labubu.Name}, цена: {labubu.Price:F2}");
+        }
+
+
+        /// <summary>
+        /// Вспомогательные методы для правильного ввода значений
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <param name="allowEmpty"></param>
+        /// <returns></returns>
         private static string GetValidatedInput(string prompt, bool allowEmpty)
         {
             string input;
@@ -298,7 +238,7 @@ namespace ConsoleApp
 
                 if (!allowEmpty && string.IsNullOrWhiteSpace(input))
                 {
-                    Console.WriteLine("РџРѕР»Рµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј! РџРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.");
+                    Console.WriteLine("Поле не может быть пустым! Попробуйте снова.");
                 }
                 else
                 {
@@ -312,46 +252,46 @@ namespace ConsoleApp
         {
             while (true)
             {
-                Console.WriteLine("Р’С‹Р±РµСЂРёС‚Рµ СЂРµРґРєРѕСЃС‚СЊ:");
+                Console.WriteLine("Выберите редкость:");
                 Console.WriteLine("1*");
                 Console.WriteLine("2*");
                 Console.WriteLine("3*");
                 Console.WriteLine("4*");
                 Console.WriteLine("5*");
-                Console.Write("Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ (1-5): ");
+                Console.Write("Введите номер (1-5): ");
 
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out int rarityNum) && rarityNum >= 1 && rarityNum <= 5)
                 {
                     return (RarityEnum)rarityNum;
                 }
-                Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІРІРѕРґ! РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 5.");
+                Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 5.");
             }
         }
         private static SizeEnum GetValidSize()
         {
             while (true)
             {
-                Console.WriteLine("Р’С‹Р±РµСЂРёС‚Рµ СЂР°Р·РјРµСЂ:");
+                Console.WriteLine("Выберите размер:");
                 Console.WriteLine("1 - small");
                 Console.WriteLine("2 - medium");
                 Console.WriteLine("3 - big");
                 Console.WriteLine("4 - HUGE");
-                Console.Write("Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ (1-4): ");
+                Console.Write("Введите номер (1-4): ");
 
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out int sizeNum) && sizeNum >= 1 && sizeNum <= 4)
                 {
-                    return (SizeEnum)(sizeNum - 1); 
+                    return (SizeEnum)(sizeNum - 1);
                 }
-                Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІРІРѕРґ! РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 4.");
+                Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 4.");
             }
         }
         private static decimal GetValidPrice()
         {
             while (true)
             {
-                Console.Write("Р’РІРµРґРёС‚Рµ С†РµРЅСѓ: ");
+                Console.Write("Введите цену: ");
                 string input = Console.ReadLine();
 
                 if (decimal.TryParse(input, out decimal price))
@@ -360,11 +300,11 @@ namespace ConsoleApp
                     {
                         return price;
                     }
-                    Console.WriteLine("Р¦РµРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕР№! РџРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.");
+                    Console.WriteLine("Цена должна быть положительной! Попробуйте снова.");
                 }
                 else
                 {
-                    Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ С†РµРЅС‹! РџРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.");
+                    Console.WriteLine("Неверный формат цены! Попробуйте снова.");
                 }
             }
         }
@@ -373,14 +313,14 @@ namespace ConsoleApp
         {
             while (true)
             {
-                Console.WriteLine($"\nРўРµРєСѓС‰Р°СЏ СЂРµРґРєРѕСЃС‚СЊ: {(int)currentRarity}*");
-                Console.WriteLine("Р’С‹Р±РµСЂРёС‚Рµ РЅРѕРІСѓСЋ СЂРµРґРєРѕСЃС‚СЊ (РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter РґР»СЏ С‚РµРєСѓС‰РµР№):");
+                Console.WriteLine($"\nТекущая редкость: {(int)currentRarity}*");
+                Console.WriteLine("Выберите новую редкость (или нажмите Enter для текущей):");
                 Console.WriteLine("1. 1*");
                 Console.WriteLine("2. 2*");
                 Console.WriteLine("3. 3*");
                 Console.WriteLine("4. 4*");
                 Console.WriteLine("5. 5*");
-                Console.Write("Р’С‹Р±РѕСЂ (1-5 РёР»Рё Enter): ");
+                Console.Write("Выбор (1-5 или Enter): ");
 
                 string input = Console.ReadLine();
 
@@ -394,7 +334,7 @@ namespace ConsoleApp
                     return (RarityEnum)rarityNum;
                 }
 
-                Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІРІРѕРґ! РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 5 РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter.");
+                Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 5 или нажмите Enter.");
             }
         }
 
@@ -402,19 +342,19 @@ namespace ConsoleApp
         {
             while (true)
             {
-                Console.WriteLine($"\nРўРµРєСѓС‰РёР№ СЂР°Р·РјРµСЂ: {currentSize}");
-                Console.WriteLine("Р’С‹Р±РµСЂРёС‚Рµ РЅРѕРІС‹Р№ СЂР°Р·РјРµСЂ (РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter РґР»СЏ С‚РµРєСѓС‰РµРіРѕ):");
+                Console.WriteLine($"\nТекущий размер: {currentSize}");
+                Console.WriteLine("Выберите новый размер (или нажмите Enter для текущего):");
                 Console.WriteLine("1. Small");
                 Console.WriteLine("2. Medium");
                 Console.WriteLine("3. Big");
                 Console.WriteLine("4. HUGE");
-                Console.Write("Р’С‹Р±РѕСЂ (1-4 РёР»Рё Enter): ");
+                Console.Write("Выбор (1-4 или Enter): ");
 
                 string input = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
-                    return currentSize; 
+                    return currentSize;
                 }
 
                 if (int.TryParse(input, out int sizeNum) && sizeNum >= 1 && sizeNum <= 4)
@@ -422,7 +362,7 @@ namespace ConsoleApp
                     return (SizeEnum)(sizeNum - 1);
                 }
 
-                Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ РІРІРѕРґ! РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ 4 РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter.");
+                Console.WriteLine("Неверный ввод! Пожалуйста, введите число от 1 до 4 или нажмите Enter.");
             }
         }
 
@@ -430,13 +370,13 @@ namespace ConsoleApp
         {
             while (true)
             {
-                Console.Write($"\nРўРµРєСѓС‰Р°СЏ С†РµРЅР°: {currentPrice:F2}\nР’РІРµРґРёС‚Рµ РЅРѕРІСѓСЋ С†РµРЅСѓ (РёР»Рё РЅР°Р¶РјРёС‚Рµ Enter РґР»СЏ С‚РµРєСѓС‰РµР№): ");
+                Console.Write($"\nТекущая цена: {currentPrice:F2}\nВведите новую цену (или нажмите Enter для текущей): ");
 
                 string input = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
-                    return currentPrice; 
+                    return currentPrice;
                 }
 
                 if (decimal.TryParse(input, out decimal price))
@@ -445,13 +385,18 @@ namespace ConsoleApp
                     {
                         return price;
                     }
-                    Console.WriteLine("Р¦РµРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕР№! РџРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.");
+                    Console.WriteLine("Цена должна быть положительной! Попробуйте снова.");
                 }
                 else
                 {
-                    Console.WriteLine("РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ С†РµРЅС‹! РџРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°.");
+                    Console.WriteLine("Неверный формат цены! Попробуйте снова.");
                 }
             }
+        }
+
+        public void ShowMessage(string message, string title = "Информация")
+        {
+            throw new NotImplementedException();
         }
     }
 

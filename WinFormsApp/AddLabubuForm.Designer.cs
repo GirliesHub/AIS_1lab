@@ -57,7 +57,6 @@ namespace WinFormsApp
             label1.Size = new Size(290, 41);
             label1.TabIndex = 0;
             label1.Text = "Добавление лабубу";
-            label1.Click += label1_Click;
             // 
             // textName
             // 
@@ -110,7 +109,6 @@ namespace WinFormsApp
             txtName.Name = "txtName";
             txtName.Size = new Size(141, 31);
             txtName.TabIndex = 5;
-            txtName.TextChanged += txtName_TextChanged;
             // 
             // txtColor
             // 
@@ -160,7 +158,6 @@ namespace WinFormsApp
             textPrice.Size = new Size(71, 32);
             textPrice.TabIndex = 12;
             textPrice.Text = "Цена";
-            textPrice.Click += label2_Click;
             // 
             // txtPrice
             // 
@@ -169,7 +166,6 @@ namespace WinFormsApp
             txtPrice.Name = "txtPrice";
             txtPrice.Size = new Size(141, 31);
             txtPrice.TabIndex = 13;
-            txtPrice.TextChanged += txtPrice_TextChanged;
             // 
             // pictureBox1
             // 
