@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
-using Ninject.Modules;
 using Microsoft.Extensions.Configuration;
+using Ninject.Modules;
 using Shared;
-using LabubuModel;
-using Presenter;
-using WinFormsApp;
-using ConsoleApp;
-using System.Windows.Forms;
-using Model.DataAccessLayer;
 using Model;
+using Presenter;
+using ConsoleApp;
+using Model.DataAccessLayer;
+using LabubuModel;
 
 namespace DI
 {
@@ -17,56 +15,26 @@ namespace DI
     {
         public override void Load()
         {
-            var projectRootPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
-
-            var jsonFilePath = Path.Combine(projectRootPath, "DataAccessLayer");
-
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(jsonFilePath)
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
-            string framework = configuration["DataAccessFramework"];
-            string view = configuration["View"];
-            string connectionString = configuration.GetConnectionString("DefaultConnection");
-
-            Bind<DBContext>().ToSelf().InTransientScope();
+            Bind<IRepository<Labubu>>()
+                .To<EFRepository>()
+                .InSingletonScope();
 
             Bind<IModel>()
-                .To<Model.Model>()  
-                .InTransientScope();
+                .To<Model.Model>()
+                .InSingletonScope();
 
-            switch (view)
-            {
-                case "Console":
-                    Bind<ILabubuView>().To<Program>().InSingletonScope();
-                    break;
+            Bind<ILabubuView>()
+                .To<Program>()
+                .InSingletonScope();
 
-                case "Form":
-                    Bind<ILabubuView>().To<MainForm>().InSingletonScope();
-                    break;
-            }
-
-            Bind<IPresenter>().To<MainPresenter>().InSingletonScope();
-
-            switch (framework)
-            {
-                case "Dapper":
-                    Bind<IRepository<Labubu>>()
-                        .To<DapperRepository>()
-                        .InSingletonScope()
-                        .WithConstructorArgument("connectionString", connectionString);
-                    break;
-
-                case "EntityFramework":
-                    Bind<IRepository<Labubu>>()
-                        .To<EFRepository>()
-                        .InSingletonScope();
-                    break;
-
-                default:
-                    throw new ArgumentException("Неподдерживаемый фреймворк доступа к данным");
-            }
+            Bind<IPresenter>()
+                .To<MainPresenter>()
+                .InSingletonScope();
         }
     }
 }

@@ -1,26 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using Shared;
-using LabubuModel;
 using DataAccessLayer;
-
+using LabubuModel;
 
 namespace Model.DataAccessLayer
 {
-    /// <summary>
-    /// Слой доступа к данным
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class EFRepository: ILabubuRepository
+    public class EFRepository : ILabubuRepository
     {
         private readonly DBContext _context;
-
         private readonly DbSet<Labubu> _set;
 
         public EFRepository()
         {
-            _context = new DBContext();
+            _context = new DBContext(); // Использует строку из appsettings.json
+            _set = _context.Set<Labubu>();
+        }
+
+        // Конструктор с явной строкой подключения
+        public EFRepository(string connectionString)
+        {
+            _context = new DBContext(connectionString);
             _set = _context.Set<Labubu>();
         }
 
@@ -42,7 +42,7 @@ namespace Model.DataAccessLayer
 
         public void Update(Labubu entity)
         {
-            var existing = _set.Find((entity as IDomainObject)?.ID);
+            var existing = _set.Find(entity.ID);
             if (existing != null)
             {
                 _context.Entry(existing).CurrentValues.SetValues(entity);

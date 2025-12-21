@@ -12,7 +12,11 @@ namespace Model.DataAccessLayer
     public class DapperRepository : ILabubuRepository
     {
         private readonly string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\LibraryDB.mdf\";Integrated Security=True";
-           
+
+        //public DapperRepository(string connectionString)
+        //{
+        //    _connectionString = connectionString;
+        //}
 
         private string Table => typeof(Labubu).Name + "s";
 

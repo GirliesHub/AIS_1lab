@@ -7,14 +7,16 @@ namespace Model.DataAccessLayer
 {
     public class DBContext : DbContext
     {
-        private static readonly string DefaultConnectionString =
-        @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\LibraryDB.mdf;Integrated Security=True";
-        public DBContext() : base("name=LibraryDB")
+        public DBContext() : base("name=DefaultConnection")
         {
+            // Автоматически создает БД если её нет
+            Database.SetInitializer(new CreateDatabaseIfNotExists<DBContext>());
         }
 
-        public DBContext(string connectionString) : base(connectionString ?? DefaultConnectionString)
+        // Конструктор с connectionString (для Dapper)
+        public DBContext(string connectionString) : base(connectionString)
         {
+            Database.SetInitializer(new CreateDatabaseIfNotExists<DBContext>());
         }
 
         public DbSet<Labubu> Labubus { get; set; }

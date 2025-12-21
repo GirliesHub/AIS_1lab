@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessLayer;
 using LabubuModel;
 using Model.DataAccessLayer;
 
@@ -9,7 +8,7 @@ namespace Model
 {
     public class Model : IModel
     {
-        private readonly IRepository<Labubu> _labubuRepository;
+        private readonly IRepository<Labubu> _repository;
 
         public event EventHandler<LabubuAddEventArgs> EventLabubuAdded = delegate { };
         public event EventHandler<LabubuUpdateEventArgs> EventLabubuUpdated = delegate { };
@@ -18,58 +17,49 @@ namespace Model
         public event EventHandler<LabubuGroupEventArgs> EventLabubuGrouped = delegate { };
         public event EventHandler<LabubuPriceEventArgs> EventLabubuPriceFound = delegate { };
 
-        public Model(IRepository<Labubu> labubuRepository)
+        public Model(IRepository<Labubu> repository)
         {
-            _labubuRepository = labubuRepository;
+            _repository = repository;
         }
-
-        // CRUD
 
         public void AddLabubu(Labubu labubu)
         {
-            _labubuRepository.Create(labubu);
+            _repository.Create(labubu);
             EventLabubuAdded(this, new LabubuAddEventArgs(labubu));
         }
 
         public void UpdateLabubu(Labubu labubu)
         {
-            _labubuRepository.Update(labubu);
+            _repository.Update(labubu);
             EventLabubuUpdated(this, new LabubuUpdateEventArgs(labubu));
         }
 
         public void DeleteLabubu(int id)
         {
-            _labubuRepository.Delete(id);
+            _repository.Delete(id);
             EventLabubuDeleted(this, new LabubuSelectEventArgs(id));
         }
 
         public void LoadLabubus()
         {
-            var list = _labubuRepository.GetAll().ToList();
-            EventLabubuList(this, new LabubuLoadListEventArgs(list));
+            var labubus = _repository.GetAll().ToList();
+            EventLabubuList(this, new LabubuLoadListEventArgs(labubus));
         }
 
         public void GroupLabubu(GroupByCriteria criteria)
         {
+            var all = _repository.GetAll().ToList();
             Dictionary<string, List<Labubu>> grouped;
 
-            switch (criteria)
+            if (criteria == GroupByCriteria.Rarity)
             {
-                case GroupByCriteria.Rarity:
-                    grouped = _labubuRepository.GetAll()
-                        .GroupBy(l => l.Rarity.ToString())
-                        .ToDictionary(g => g.Key, g => g.ToList());
-                    break;
-
-                case GroupByCriteria.Size:
-                    grouped = _labubuRepository.GetAll()
-                        .GroupBy(l => l.Size.ToString())
-                        .ToDictionary(g => g.Key, g => g.ToList());
-                    break;
-
-                default:
-                    grouped = new Dictionary<string, List<Labubu>>();
-                    break;
+                grouped = all.GroupBy(l => l.Rarity.ToString())
+                    .ToDictionary(g => g.Key, g => g.ToList());
+            }
+            else // Size
+            {
+                grouped = all.GroupBy(l => l.Size.ToString())
+                    .ToDictionary(g => g.Key, g => g.ToList());
             }
 
             EventLabubuGrouped(this, new LabubuGroupEventArgs(grouped, criteria));
@@ -77,18 +67,19 @@ namespace Model
 
         public void FindMostLeastExpensiveLabubu(bool findMostExpensive)
         {
-            var list = _labubuRepository.GetAll().ToList();
+            var all = _repository.GetAll().ToList();
 
-            if (list.Count == 0)
-                throw new InvalidOperationException("Список лабуб пуст");
+            if (all.Count == 0)
+            {
+                EventLabubuPriceFound(this, new LabubuPriceEventArgs(null, findMostExpensive));
+                return;
+            }
 
-            Labubu labubu = findMostExpensive
-                ? list.OrderByDescending(l => l.Price).First()
-                : list.OrderBy(l => l.Price).First();
+            var labubu = findMostExpensive
+                ? all.OrderByDescending(l => l.Price).First()
+                : all.OrderBy(l => l.Price).First();
 
-            EventLabubuPriceFound(this,
-                new LabubuPriceEventArgs(labubu, findMostExpensive));
+            EventLabubuPriceFound(this, new LabubuPriceEventArgs(labubu, findMostExpensive));
         }
-
     }
 }
