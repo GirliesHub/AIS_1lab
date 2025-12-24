@@ -44,6 +44,13 @@ namespace WinFormsApp
             btnMostExpensive = new Button();
             label3 = new Label();
             label4 = new Label();
+            numericMinPrice = new NumericUpDown();
+            numericMaxPrice = new NumericUpDown();
+            btnApplyPriceFilter = new Button();
+            btnClearFilters = new Button();
+            labelFilter = new Label();
+            ((System.ComponentModel.ISupportInitialize)numericMinPrice).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericMaxPrice).BeginInit();
             SuspendLayout();
             // 
             // btnAddLabubu
@@ -177,11 +184,61 @@ namespace WinFormsApp
             label4.TabIndex = 13;
             label4.Text = "Добро пожаловать в Мир Лабуб!";
             // 
+            // numericMinPrice
+            // 
+            numericMinPrice.DecimalPlaces = 2;
+            numericMinPrice.Location = new Point(395, 338);
+            numericMinPrice.Maximum = new decimal(new int[] { 1410065408, 2, 0, 0 });
+            numericMinPrice.Name = "numericMinPrice";
+            numericMinPrice.Size = new Size(120, 23);
+            numericMinPrice.TabIndex = 14;
+            // 
+            // numericMaxPrice
+            // 
+            numericMaxPrice.DecimalPlaces = 2;
+            numericMaxPrice.Location = new Point(395, 367);
+            numericMaxPrice.Maximum = new decimal(new int[] { 1410065408, 2, 0, 0 });
+            numericMaxPrice.Name = "numericMaxPrice";
+            numericMaxPrice.Size = new Size(120, 23);
+            numericMaxPrice.TabIndex = 15;
+            // 
+            // btnApplyPriceFilter
+            // 
+            btnApplyPriceFilter.Location = new Point(395, 396);
+            btnApplyPriceFilter.Name = "btnApplyPriceFilter";
+            btnApplyPriceFilter.Size = new Size(120, 23);
+            btnApplyPriceFilter.TabIndex = 16;
+            btnApplyPriceFilter.Text = "Задать диапазон";
+            btnApplyPriceFilter.UseVisualStyleBackColor = true;
+            // 
+            // btnClearFilters
+            // 
+            btnClearFilters.Location = new Point(395, 425);
+            btnClearFilters.Name = "btnClearFilters";
+            btnClearFilters.Size = new Size(120, 23);
+            btnClearFilters.TabIndex = 17;
+            btnClearFilters.Text = "Сброс";
+            btnClearFilters.UseVisualStyleBackColor = true;
+            // 
+            // labelFilter
+            // 
+            labelFilter.AutoSize = true;
+            labelFilter.Location = new Point(395, 320);
+            labelFilter.Name = "labelFilter";
+            labelFilter.Size = new Size(120, 15);
+            labelFilter.TabIndex = 18;
+            labelFilter.Text = "Фильтрация по цене";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(labelFilter);
+            Controls.Add(btnClearFilters);
+            Controls.Add(btnApplyPriceFilter);
+            Controls.Add(numericMaxPrice);
+            Controls.Add(numericMinPrice);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(btnMostExpensive);
@@ -198,6 +255,8 @@ namespace WinFormsApp
             Controls.Add(btnAddLabubu);
             Name = "MainForm";
             Text = "Мир Лабуб";
+            ((System.ComponentModel.ISupportInitialize)numericMinPrice).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericMaxPrice).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -220,5 +279,10 @@ namespace WinFormsApp
         private Button btnMostExpensive;
         private Label label3;
         private Label label4;
+        private NumericUpDown numericMinPrice;
+        private NumericUpDown numericMaxPrice;
+        private Button btnApplyPriceFilter;
+        private Button btnClearFilters;
+        private Label labelFilter;
     }
 }

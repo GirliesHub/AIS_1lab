@@ -25,6 +25,8 @@ namespace WinFormsApp
             this.btnGroupBySize.Click += BtnGroupBySize_Click;
             this.btnMostExpensive.Click += btnMostExpensive_Click;
             this.btnCheapest.Click += BtnCheapest_Click;
+            this.btnApplyPriceFilter.Click += BtnApplyPriceFilter_Click;
+            this.btnClearFilters.Click += BtnClearFilters_Click;
 
             this.listViewLabubus.SelectedIndexChanged += listViewLabubus_SelectedIndexChanged;
         }
@@ -59,9 +61,9 @@ namespace WinFormsApp
                 item.SubItems.Add(labubu.Name);
                 item.SubItems.Add(labubu.Color);
                 item.SubItems.Add(labubu.Rarity.ToString());
-                item.SubItems.Add(labubu.Price.ToString("F2"));
                 string sizeDisplay = labubu.Size.ToString();
                 item.SubItems.Add(sizeDisplay);
+                item.SubItems.Add(labubu.Price.ToString("F2"));
 
                 listViewLabubus.Items.Add(item);
             }
@@ -394,5 +396,31 @@ namespace WinFormsApp
             base.OnFormClosing(e);
             NinjectService.Dispose();
         }
+
+        private void BtnApplyPriceFilter_Click(object sender, EventArgs e)
+        {
+            decimal min = numericMinPrice.Value;
+            decimal max = numericMaxPrice.Value;
+
+            if (min > max)
+            {
+                MessageBox.Show("Минимальная цена не может быть больше максимальной.");
+                return;
+            }
+
+            // Лучше фильтровать через BLL, а не прямо в форме:
+            var filtered = _logic.GetLabubusByPriceRange(min, max);
+            DisplayLabubuList(filtered);
+        }
+
+        private void BtnClearFilters_Click(object sender, EventArgs e)
+        {
+            numericMinPrice.Value = 0;
+            numericMaxPrice.Value = 0;
+
+            txtSearch.Clear();
+            RefreshLabubuList();
+        }
+
     }
 }

@@ -132,5 +132,21 @@ namespace BusinessLogic
 
             UpdateLabubu(labubu);
         }
+
+        public List<Labubu> GetLabubusByPriceRange(decimal minPrice, decimal maxPrice)
+        {
+            if (minPrice < 0 || maxPrice < 0)
+                throw new ArgumentException("Цена не может быть отрицательной.");
+
+            if (minPrice > maxPrice)
+                throw new ArgumentException("MinPrice не может быть больше MaxPrice.");
+
+            return _repository
+                .GetAll()
+                .Where(x => x.Price >= minPrice && x.Price <= maxPrice)
+                .ToList();
+        }
+
     }
+
 }

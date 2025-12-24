@@ -26,7 +26,7 @@ namespace ConsoleApp
             {
                 Console.Clear();
                 Console.WriteLine("Добро пожаловать в Мир Лабуб! Что вы хотите сделать?");
-                Console.WriteLine("1. Добавить лабубу \n 2. Удалить лабубу \n 3. Изменить лабубу \n 4. Сгруппировать лабуб по признаку \n 5. Показать список всех лабуб \n 6. Найти самую дорогую/дешевую лабубу \n 0. Выход");
+                Console.WriteLine("1. Добавить лабубу \n 2. Удалить лабубу \n 3. Изменить лабубу \n 4. Сгруппировать лабуб по признаку \n 5. Показать список всех лабуб \n 6. Найти самую дорогую/дешевую лабубу \n 7. Показать лабуб по диапазону цен \n 0. Выход");
                 Console.WriteLine("Выберите номер: ");
                 string number = Console.ReadLine();
                 switch (number)
@@ -54,6 +54,10 @@ namespace ConsoleApp
                     case "6":
                         Console.Clear();
                         FindMostLeastExpensiveLabubu();
+                        break;
+                    case "7":
+                        Console.Clear();
+                        ShowLabubusByPriceRange();
                         break;
                     case "0":
                         Console.Clear();
@@ -281,6 +285,51 @@ namespace ConsoleApp
                     Console.WriteLine($"Ошибка: {ex.Message}");
                 }
             }
+
+            static decimal ReadDecimal(string prompt)
+            {
+                while (true)
+                {
+                    Console.Write(prompt);
+                    var input = Console.ReadLine();
+
+                    // decimal.TryParse учитывает культуру (точка/запятая), так что лучше позволить пользователю вводить “как у него в системе”.
+                    if (decimal.TryParse(input, out var value) && value >= 0)
+                        return value;
+
+                    Console.WriteLine("Неверное число. Введите цену >= 0 (например 123,45).");
+                }
+            }
+
+            static void ShowLabubusByPriceRange()
+            {
+                try
+                {
+                    Console.WriteLine("Фильтр по диапазону цен");
+
+                    decimal min = ReadDecimal("Введите минимальную цену: ");
+                    decimal max = ReadDecimal("Введите максимальную цену: ");
+
+                    var result = _logic.GetLabubusByPriceRange(min, max);
+
+                    if (result.Count == 0)
+                    {
+                        Console.WriteLine($"Нет лабуб в диапазоне {min} .. {max}");
+                        return;
+                    }
+
+                    Console.WriteLine($"Лабубы в диапазоне {min} .. {max}:");
+                    foreach (var labubu in result)
+                    {
+                        Console.WriteLine($"ID: {labubu.ID}, Имя: {labubu.Name}, Цена: {labubu.Price:C}, Редкость: {labubu.Rarity}, Размер: {labubu.Size}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+            }
+
         }
        /// <summary>
        /// Вспомогательные методы для правильного ввода значений
