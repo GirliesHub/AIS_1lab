@@ -1,136 +1,127 @@
 ﻿using DataAccessLayer;
 using Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using SharedLabubu;
 
 namespace BusinessLogic
 {
     /// <summary>
-    /// Логика приложения для работы с Labubu
+    /// Логика приложения для работы с Labubu 
     /// </summary>
-    public class Logic
+    public class Logic : ILogic
     {
         private readonly IRepository<Labubu> _repository;
 
         /// <summary>
-        /// Конструктор с внедрением зависимости (Dependency Injection)
+        /// Событие, возникающее после изменения данных (CRUD‑операции).
         /// </summary>
-        /// <param name="repository">Репозиторий для работы с данными</param>
+        public event Action DataChanged;
+
         public Logic(IRepository<Labubu> repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         /// <summary>
-        /// Добавляет новую лабубу
+        /// Генерирует событие <see cref="DataChanged"/>.
         /// </summary>
-        public void AddLabubu(Labubu labubu)
+        protected virtual void OnDataChanged()
         {
-            if (labubu == null)
-                throw new ArgumentNullException(nameof(labubu));
-
-            if (labubu.ID <= 0)
-            {
-                var allLabubus = _repository.GetAll().ToList();
-                labubu.ID = allLabubus.Count > 0 ? allLabubus.Max(l => l.ID) + 1 : 1;
-            }
-
-            _repository.Create(labubu);
+            DataChanged?.Invoke();
         }
 
         /// <summary>
-        /// Получает все лабубы
+        /// Создаёт новую лабубу по DTO и сохраняет её в репозитории.
         /// </summary>
-        public List<Labubu> GetAllLabubus()
+        /// <param name="dto">DTO с данными новой лабубы.</param>
+        public void Create(LabubuDTO dto)
         {
-            return _repository.GetAll().ToList();
+            var entity = LabubuMapper.ToEntity(dto);
+            _repository.Create(entity);
+            OnDataChanged();
         }
 
         /// <summary>
-        /// Удаляет лабубу по ID
+        /// Возвращает список всех лабуб в виде DTO.
         /// </summary>
-        public void RemoveLabubu(int id)
+        /// <returns>Список <see cref="LabubuDTO"/>.</returns>
+        public List<LabubuDTO> ReadAll()
         {
-            _repository.Remove(id);
+            return _repository.GetAll()
+                             .Select(LabubuMapper.ToDTO)
+                             .ToList();
         }
 
         /// <summary>
-        /// Обновляет лабубу
+        /// Возвращает лабубу по индексу в текущем списке.
         /// </summary>
-        public void UpdateLabubu(Labubu labubu)
+        /// <param name="index">Индекс элемента в коллекции.</param>
+        public LabubuDTO Read(int index)
         {
-            if (labubu == null)
-                throw new ArgumentNullException(nameof(labubu));
-
-            var existing = _repository.Get(labubu.ID);
-            if (existing == null)
-                throw new ArgumentException($"Лабуба с ID {labubu.ID} не найдена");
-
-            _repository.Update(labubu);
+            var all = ReadAll();
+            return index >= 0 && index < all.Count ? all[index] : null;
         }
 
         /// <summary>
-        /// Группирует лабубы по критерию
+        /// Обновляет данные существующей лабубы по индексу.
         /// </summary>
-        public Dictionary<string, List<Labubu>> GroupLabubu(GroupByCriteria criteria)
+        /// <param name="index">Индекс редактируемой лабубы.</param>
+        /// <param name="dto">Новые данные в виде DTO.</param>
+        public void Update(int index, LabubuDTO dto)
         {
-            var all = _repository.GetAll();
+            var all = _repository.GetAll().ToList();
+            if (index < 0 || index >= all.Count) return;
+
+            var original = all[index];
+            var updated = LabubuMapper.ToEntity(dto, original.ID);
+            _repository.Update(updated);
+            OnDataChanged();
+        }
+
+        /// <summary>
+        /// Удаляет лабубу по индексу в списке.
+        /// </summary>
+        /// <param name="index">Индекс удаляемой лабубы.</param>
+        public void Delete(int index)
+        {
+            var all = _repository.GetAll().ToList();
+            if (index < 0 || index >= all.Count) return;
+
+            _repository.Remove(all[index].ID);
+            OnDataChanged();
+        }
+
+        /// <summary>
+        /// Группирует лабуб по указанному критерию.
+        /// </summary>
+        /// <param name="criteria">Критерий группировки (редкость или размер).</param>
+        public Dictionary<string, List<LabubuDTO>> Group(GroupByCriteria criteria)
+        {
             return criteria switch
             {
-                GroupByCriteria.Rarity =>
-                    all.GroupBy(x => x.Rarity.ToString())
-                       .ToDictionary(g => g.Key, g => g.ToList()),
-                GroupByCriteria.Size =>
-                    all.GroupBy(x => x.Size.ToString())
-                       .ToDictionary(g => g.Key, g => g.ToList()),
-                _ => throw new ArgumentException("Unknown criteria")
+                GroupByCriteria.Rarity => _repository.GetAll()
+                    .GroupBy(x => x.Rarity.ToString())
+                    .ToDictionary(g => g.Key, g => g.Select(LabubuMapper.ToDTO).ToList()),
+                GroupByCriteria.Size => _repository.GetAll()
+                    .GroupBy(x => x.Size.ToString())
+                    .ToDictionary(g => g.Key, g => g.Select(LabubuMapper.ToDTO).ToList()),
+                _ => throw new ArgumentException("Неизвестный критерий группировки")
             };
         }
 
         /// <summary>
-        /// Находит самую дорогую или дешевую лабубу
+        /// Ищет самую дешёвую или самую дорогую лабубу.
         /// </summary>
-        public Labubu FindMostLeastExpensiveLabubu(bool findMostExpensive)
+        /// <param name="findMostExpensive">
+        /// true - поиск самой дорогой лабубы, false — самой дешёвой.
+        /// </param>
+        public LabubuDTO FindMostLeastExpensive(bool findMostExpensive)
         {
-            var list = _repository.GetAll().ToList();
-            if (list.Count == 0)
-                throw new InvalidOperationException("Список пуст");
+            var list = ReadAll();
+            if (list.Count == 0) return null;
 
             return findMostExpensive
                 ? list.OrderByDescending(x => x.Price).First()
                 : list.OrderBy(x => x.Price).First();
-        }
-
-        /// <summary>
-        /// Получает лабубу по ID
-        /// </summary>
-        public Labubu GetLabubuById(int id)
-        {
-            return _repository.Get(id);
-        }
-        /// <summary>
-        /// Метод обновления лабубу
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="color"></param>
-        /// <param name="rarity"></param>
-        /// <param name="size"></param>
-        /// <param name="price"></param>
-        public void UpdateLabubu(int id, string name, string color, RarityEnum rarity, SizeEnum size, decimal price)
-        {
-            var labubu = new Labubu
-            {
-                ID = id,
-                Name = name,
-                Color = color,
-                Rarity = rarity,
-                Size = size,
-                Price = price
-            };
-
-            UpdateLabubu(labubu);
         }
     }
 }

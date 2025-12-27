@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "B/9TOUJPbH0=",
+  "dgSpecHash": "KGsRkmUH6hs=",
   "success": true,
-  "projectFilePath": "C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\ConsoleApp\\ConsoleApp.csproj",
+  "projectFilePath": "C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\ConsoleApp\\ConsoleApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lonit\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\lonit\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

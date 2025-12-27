@@ -37,11 +37,9 @@ namespace WinFormsApp
             txtSearch = new TextBox();
             btnReset = new Button();
             btnGroupByRarity = new Button();
-            btnGroupBySize = new Button();
             label1 = new Label();
             label2 = new Label();
             btnCheapest = new Button();
-            btnMostExpensive = new Button();
             label3 = new Label();
             label4 = new Label();
             SuspendLayout();
@@ -54,7 +52,6 @@ namespace WinFormsApp
             btnAddLabubu.TabIndex = 0;
             btnAddLabubu.Text = "Добавить лабубу";
             btnAddLabubu.UseVisualStyleBackColor = true;
-            btnAddLabubu.Click += btnAddLabubu_Click;
             // 
             // btnRemoveLabubu
             // 
@@ -64,7 +61,6 @@ namespace WinFormsApp
             btnRemoveLabubu.TabIndex = 1;
             btnRemoveLabubu.Text = "Удалить лабубу";
             btnRemoveLabubu.UseVisualStyleBackColor = true;
-            btnRemoveLabubu.Click += btnRemoveLabubu_Click;
             // 
             // btnUpdateLabubu
             // 
@@ -74,7 +70,6 @@ namespace WinFormsApp
             btnUpdateLabubu.TabIndex = 2;
             btnUpdateLabubu.Text = "Изменить лабубу";
             btnUpdateLabubu.UseVisualStyleBackColor = true;
-            btnUpdateLabubu.Click += btnUpdateLabubu_Click;
             // 
             // listViewLabubus
             // 
@@ -84,20 +79,19 @@ namespace WinFormsApp
             listViewLabubus.Size = new Size(535, 154);
             listViewLabubus.TabIndex = 3;
             listViewLabubus.UseCompatibleStateImageBehavior = false;
-            listViewLabubus.SelectedIndexChanged += listViewLabubus_SelectedIndexChanged;
             // 
             // txtSearch
             // 
-            txtSearch.Location = new Point(244, 339);
+            txtSearch.Location = new Point(308, 338);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(110, 23);
             txtSearch.TabIndex = 4;
             // 
             // btnReset
             // 
-            btnReset.Location = new Point(12, 396);
+            btnReset.Location = new Point(12, 367);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(79, 23);
+            btnReset.Size = new Size(116, 23);
             btnReset.TabIndex = 5;
             btnReset.Text = "Сброс";
             btnReset.UseVisualStyleBackColor = true;
@@ -106,24 +100,15 @@ namespace WinFormsApp
             // 
             btnGroupByRarity.Location = new Point(12, 338);
             btnGroupByRarity.Name = "btnGroupByRarity";
-            btnGroupByRarity.Size = new Size(79, 23);
+            btnGroupByRarity.Size = new Size(116, 23);
             btnGroupByRarity.TabIndex = 6;
-            btnGroupByRarity.Text = "Редкость";
+            btnGroupByRarity.Text = "Редкость/Размер";
             btnGroupByRarity.UseVisualStyleBackColor = true;
-            // 
-            // btnGroupBySize
-            // 
-            btnGroupBySize.Location = new Point(12, 367);
-            btnGroupBySize.Name = "btnGroupBySize";
-            btnGroupBySize.Size = new Size(79, 23);
-            btnGroupBySize.TabIndex = 7;
-            btnGroupBySize.Text = "Размер";
-            btnGroupBySize.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 320);
+            label1.Location = new Point(28, 320);
             label1.Name = "label1";
             label1.Size = new Size(79, 15);
             label1.TabIndex = 8;
@@ -132,7 +117,7 @@ namespace WinFormsApp
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(244, 320);
+            label2.Location = new Point(308, 320);
             label2.Name = "label2";
             label2.Size = new Size(110, 15);
             label2.TabIndex = 9;
@@ -140,26 +125,17 @@ namespace WinFormsApp
             // 
             // btnCheapest
             // 
-            btnCheapest.Location = new Point(122, 338);
+            btnCheapest.Location = new Point(159, 338);
             btnCheapest.Name = "btnCheapest";
-            btnCheapest.Size = new Size(88, 23);
+            btnCheapest.Size = new Size(116, 23);
             btnCheapest.TabIndex = 10;
-            btnCheapest.Text = "Мин цена";
+            btnCheapest.Text = "Дешевая/Дорогая";
             btnCheapest.UseVisualStyleBackColor = true;
-            // 
-            // btnMostExpensive
-            // 
-            btnMostExpensive.Location = new Point(122, 367);
-            btnMostExpensive.Name = "btnMostExpensive";
-            btnMostExpensive.Size = new Size(88, 23);
-            btnMostExpensive.TabIndex = 11;
-            btnMostExpensive.Text = "Макс цена";
-            btnMostExpensive.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(122, 320);
+            label3.Location = new Point(172, 320);
             label3.Name = "label3";
             label3.Size = new Size(88, 15);
             label3.TabIndex = 12;
@@ -184,11 +160,9 @@ namespace WinFormsApp
             ClientSize = new Size(800, 450);
             Controls.Add(label4);
             Controls.Add(label3);
-            Controls.Add(btnMostExpensive);
             Controls.Add(btnCheapest);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(btnGroupBySize);
             Controls.Add(btnGroupByRarity);
             Controls.Add(btnReset);
             Controls.Add(txtSearch);
@@ -213,11 +187,9 @@ namespace WinFormsApp
         private TextBox txtSearch;
         private Button btnReset;
         private Button btnGroupByRarity;
-        private Button btnGroupBySize;
         private Label label1;
         private Label label2;
         private Button btnCheapest;
-        private Button btnMostExpensive;
         private Label label3;
         private Label label4;
     }

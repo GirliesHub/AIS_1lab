@@ -148,7 +148,6 @@ namespace WinFormsApp
             textPrice1.Name = "textPrice1";
             textPrice1.Size = new Size(100, 23);
             textPrice1.TabIndex = 10;
-            textPrice1.TextChanged += textPrice1_TextChanged;
             // 
             // label7
             // 

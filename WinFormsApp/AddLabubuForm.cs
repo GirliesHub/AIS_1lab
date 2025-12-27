@@ -1,79 +1,63 @@
-using Model;
-using BusinessLogic;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Model;
+using SharedLabubu;
 
 namespace WinFormsApp
 {
+    /// <summary>
+    /// Форма добавления новой лабубы
+    /// </summary>
     public partial class AddLabubuForm : Form
     {
+        public LabubuDTO Result { get; private set; }
 
-        private Logic logic;
-        public AddLabubuForm(Logic logic)
+        public AddLabubuForm()
         {
             InitializeComponent();
-            this.logic = logic;
             InitializeComboBoxes();
         }
 
         /// <summary>
-        /// выпадающие списки
+        /// Заполняет комбобоксы
         /// </summary>
         private void InitializeComboBoxes()
         {
             cmbRarity.Items.Clear();
             cmbRarity.Items.AddRange(new string[] { "1*", "2*", "3*", "4*", "5*" });
 
-
             cmbSizes.Items.Clear();
             cmbSizes.Items.AddRange(new string[] { "small", "medium", "big", "HUGE" });
         }
 
         /// <summary>
-        /// преобразует строку в RarityEnum
+        /// Преобразует строку редкости в перечисление <see cref="RarityEnum"/>.
         /// </summary>
-        private RarityEnum ParseRarity(string rarityString)
+        private RarityEnum ParseRarity(string rarityString) => rarityString switch
         {
-            return rarityString switch
-            {
-                "1*" => RarityEnum.OneStar,
-                "2*" => RarityEnum.TwoStars,
-                "3*" => RarityEnum.ThreeStars,
-                "4*" => RarityEnum.FourStars,
-                "5*" => RarityEnum.FiveStars,
-                _ => throw new ArgumentException($"Неизвестная редкость: {rarityString}")
-            };
-        }
+            "1*" => RarityEnum.OneStar,
+            "2*" => RarityEnum.TwoStars,
+            "3*" => RarityEnum.ThreeStars,
+            "4*" => RarityEnum.FourStars,
+            "5*" => RarityEnum.FiveStars,
+            _ => throw new ArgumentException($"Неизвестная редкость: {rarityString}")
+        };
 
         /// <summary>
-        /// преобразует строку в SizeEnum
+        /// Преобразует строку размера в перечисление <see cref="SizeEnum"/>.
         /// </summary>
-        private SizeEnum ParseSize(string sizeString)
+        private SizeEnum ParseSize(string sizeString) => sizeString.ToLower() switch
         {
-            return sizeString.ToLower() switch
-            {
-                "small" => SizeEnum.Small,
-                "medium" => SizeEnum.Medium,
-                "big" => SizeEnum.Big,
-                "huge" => SizeEnum.HUGE,
-                _ => throw new ArgumentException($"Неизвестный размер: {sizeString}")
-            };
-        }
+            "small" => SizeEnum.Small,
+            "medium" => SizeEnum.Medium,
+            "big" => SizeEnum.Big,
+            "huge" => SizeEnum.HUGE,
+            _ => throw new ArgumentException($"Неизвестный размер: {sizeString}")
+        };
 
         /// <summary>
-        /// кнопка добавить лабубу
+        /// Обработчик кнопки добавления. Валидирует ввод и формирует DTO в свойстве <see cref="Result"/>.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string name = txtName.Text;
@@ -91,14 +75,9 @@ namespace WinFormsApp
                 return;
             }
 
-            RarityEnum rarity = ParseRarity(cmbRarity.SelectedItem.ToString());
-            SizeEnum size = ParseSize(cmbSizes.SelectedItem.ToString());
-
-            int number = logic.GetAllLabubus().Count;
-
             if (!decimal.TryParse(txtPrice.Text, out decimal price) || price <= 0)
             {
-                MessageBox.Show("Введите корректную цену (должна быть положительной)!");
+                MessageBox.Show("Введите корректную цену (положительное число)!");
                 return;
             }
 
@@ -108,51 +87,20 @@ namespace WinFormsApp
                 return;
             }
 
-            try
+            var rarity = ParseRarity(cmbRarity.SelectedItem.ToString());
+            var size = ParseSize(cmbSizes.SelectedItem.ToString());
+
+            Result = new LabubuDTO
             {
-                var labubu = new Labubu
-                {
-                    Name = txtName.Text,
-                    Color = txtColor.Text,
-                    Rarity = ParseRarity(cmbRarity.SelectedItem.ToString()),
-                    Size = ParseSize(cmbSizes.SelectedItem.ToString()),
-                    Price = decimal.Parse(txtPrice.Text)
-                };
+                Name = name,
+                Color = color,
+                Rarity = rarity,
+                Size = size,
+                Price = price
+            };
 
-                logic.AddLabubu(labubu); 
-                MessageBox.Show("Лабуба добавлена.");
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при добавлении: {ex.Message}");
-            }
-
-        }
-
-       /// <summary>
-       /// Обработчики событий
-       /// </summary>
-       /// <param name="sender"></param>
-       /// <param name="e"></param>
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtPrice_TextChanged(object sender, EventArgs e)
-        {
-
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

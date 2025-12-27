@@ -3,68 +3,106 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Model;
+using DataAccessLayer;
 
-namespace DataAccessLayer
+public class DapperRepository<T> : IRepository<T> where T : class, IDomainObject
 {
-    public class DapperRepository<T> : IRepository<T> where T : class, IDomainObject
+    private readonly string _connectionString;
+
+    public DapperRepository()
+    : this(@"Data Source=(localdb)\MSSQLLocalDB;AttachDbFilename=C:\Users\lonit\source\repos\AIS_1lab\DataAccessLayer\LibraryDB.mdf;Integrated Security=True;")
     {
-        private readonly string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\lonit\\source\\repos\\GirliesHub\\AIS_1lab\\DataAccessLayer\\LibraryDB.mdf\";Integrated Security=True";
-           
+    }
 
-        private string Table => typeof(T).Name + "s";
+    /// <summary>
+    /// Создаёт репозиторий с указанной строкой подключения.
+    /// </summary>
+    /// <param name="connectionString">Строка подключения к базе данных.</param>
+    public DapperRepository(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
 
-        public IEnumerable<T> GetAll()
+    /// <summary>
+    /// Возвращает новый экземпляр подключения к базе данных.
+    /// </summary>
+    private SqlConnection Connection => new SqlConnection(_connectionString);
+
+    private string Table => typeof(T).Name + "s";
+
+    /// <summary>
+    /// Возвращает все записи из таблицы.
+    /// </summary>
+    public IEnumerable<T> GetAll()
+    {
+        using var conn = Connection;
+        return conn.Query<T>($"SELECT * FROM {Table}");
+    }
+
+    /// <summary>
+    /// Возвращает сущность по идентификатору.
+    /// </summary>
+    public T Get(int id)
+    {
+        using var conn = Connection;
+        return conn.QuerySingleOrDefault<T>(
+            $"SELECT * FROM {Table} WHERE ID = @ID",
+            new { ID = id });
+    }
+
+    /// <summary>
+    /// Создаёт новую запись в базе данных.
+    /// </summary>
+    /// <param name="entity">Создаваемая сущность.</param>
+    public void Create(T entity)
+    {
+        using var conn = Connection;
+
+        if (entity is Labubu labubu)
         {
-            using var conn = new SqlConnection(_connectionString);
-            return conn.Query<T>($"SELECT * FROM {Table}");
-        }
+            const string sql = @"
+            INSERT INTO Labubus (Name, Color, Rarity, Size, Price)
+            VALUES (@Name, @Color, @Rarity, @SizeInternal, @Price);
+            SELECT CAST(SCOPE_IDENTITY() AS int);
+        ";
 
-        public T Get(int id)
+            labubu.ID = conn.QuerySingle<int>(sql, labubu);
+            return;
+        }
+    }
+
+    /// <summary>
+    /// Обновляет существующую запись в базе данных.
+    /// </summary>
+    /// <param name="entity">Обновляемая сущность.</param>
+    public void Update(T entity)
+    {
+        using var conn = Connection;
+
+        if (entity is Labubu labubu)
         {
-            using var conn = new SqlConnection(_connectionString);
-            return conn.QuerySingleOrDefault<T>(
-                $"SELECT * FROM {Table} WHERE ID=@ID",
-                new { ID = id });
+            const string sql = @"
+            UPDATE Labubus
+            SET Name        = @Name,
+                Color       = @Color,
+                Rarity      = @Rarity,
+                Size        = @SizeInternal,
+                Price       = @Price
+            WHERE ID = @ID;
+        ";
+
+            conn.Execute(sql, labubu);
+            return;
         }
+    }
 
-        public void Create(T entity)
-        {
-            using var conn = new SqlConnection(_connectionString);
-
-            var props = typeof(T).GetProperties().Where(p => p.Name != "ID");
-
-            string columns = string.Join(",", props.Select(x => x.Name));
-            string values = string.Join(",", props.Select(x => "@" + x.Name));
-
-            string sql = $@"
-                INSERT INTO {Table} ({columns})
-                VALUES ({values});
-                SELECT CAST(SCOPE_IDENTITY() as int);
-            ";
-
-            entity.ID = conn.QuerySingle<int>(sql, entity);
-        }
-
-        public void Update(T entity)
-        {
-            using var conn = new SqlConnection(_connectionString);
-
-            var props = typeof(T).GetProperties().Where(p => p.Name != "ID");
-            string setClause = string.Join(",", props.Select(x => $"{x.Name}=@{x.Name}"));
-
-            string sql = $@"
-                UPDATE {Table}
-                SET {setClause}
-                WHERE ID=@ID
-            ";
-
-            conn.Execute(sql, entity);
-        }
-
-        public void Remove(int id)
-        {
-            using var conn = new SqlConnection(_connectionString);
-            conn.Execute($"DELETE FROM {Table} WHERE ID=@ID", new { ID = id });
-        }
+    /// <summary>
+    /// Удаляет по идентификатору.
+    /// </summary>
+    /// <param name="id">Идентификатор удаляемой сущности.</param>
+    public void Remove(int id)
+    {
+        using var conn = Connection;
+        conn.Execute($"DELETE FROM {Table} WHERE ID = @ID", new { ID = id });
     }
 }
