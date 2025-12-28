@@ -10,7 +10,7 @@ public class DapperRepository<T> : IRepository<T> where T : class, IDomainObject
     private readonly string _connectionString;
 
     public DapperRepository()
-    : this(@"Data Source=(localdb)\MSSQLLocalDB;AttachDbFilename=C:\Users\lonit\source\repos\AIS_1lab\DataAccessLayer\LibraryDB.mdf;Integrated Security=True;")
+    : this(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""C:\Users\Вероника\OneDrive\Рабочий стол\AIS_LABA_1\DataAccessLayer\LabubuDB.mdf"";Integrated Security=True")
     {
     }
 

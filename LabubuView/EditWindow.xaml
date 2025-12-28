@@ -1,0 +1,100 @@
+﻿<Window x:Class="LabubuView.EditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Model;assembly=Model"
+        Title="Редактирование Labubu"
+        Height="380" Width="480"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize">
+
+    <Grid Margin="20">
+        <!-- Заголовок -->
+        <TextBlock 
+                   FontSize="20" FontWeight="Bold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,25" Width="277"><Run Text="Редактирование "/><Run Language="ru-ru" Text="лабубы"/></TextBlock>
+
+        <!-- Основная сетка полей -->
+        <Grid Margin="0,45,0,25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!-- Растягивание -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Имя -->
+            <TextBlock Text="Имя:" Grid.Row="0" Grid.Column="0" 
+                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding Item.Name, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="0" Grid.Column="1" 
+                     VerticalContentAlignment="Center" Margin="0,0,0,12"/>
+
+            <!-- Цвет -->
+            <TextBlock Text="Цвет:" Grid.Row="1" Grid.Column="0" 
+                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding Item.Color, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="1" Grid.Column="1" 
+                     VerticalContentAlignment="Center" Margin="0,0,0,12"/>
+
+            <!-- Редкость -->
+            <TextBlock Text="Редкость:" Grid.Row="2" Grid.Column="0" 
+                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" 
+                      SelectedItem="{Binding Item.Rarity}"
+                      VerticalContentAlignment="Center" Margin="0,0,0,12">
+                <ComboBox.ItemsSource>
+                    <x:Array Type="{x:Type local:RarityEnum}">
+                        <local:RarityEnum>OneStar</local:RarityEnum>
+                        <local:RarityEnum>TwoStars</local:RarityEnum>
+                        <local:RarityEnum>ThreeStars</local:RarityEnum>
+                        <local:RarityEnum>FourStars</local:RarityEnum>
+                        <local:RarityEnum>FiveStars</local:RarityEnum>
+                    </x:Array>
+                </ComboBox.ItemsSource>
+            </ComboBox>
+
+            <!-- Размер -->
+            <TextBlock Text="Размер:" Grid.Row="3" Grid.Column="0" 
+                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Grid.Row="3" Grid.Column="1" 
+                      SelectedItem="{Binding Item.Size}"
+                      VerticalContentAlignment="Center" Margin="0,0,0,12">
+                <ComboBox.ItemsSource>
+                    <x:Array Type="{x:Type local:SizeEnum}">
+                        <local:SizeEnum>Small</local:SizeEnum>
+                        <local:SizeEnum>Medium</local:SizeEnum>
+                        <local:SizeEnum>Big</local:SizeEnum>
+                        <local:SizeEnum>HUGE</local:SizeEnum>
+                    </x:Array>
+                </ComboBox.ItemsSource>
+            </ComboBox>
+
+            <!-- Цена -->
+            <TextBlock Text="Цена:" Grid.Row="4" Grid.Column="0" 
+                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding Item.Price, UpdateSourceTrigger=PropertyChanged}" 
+                     Grid.Row="4" Grid.Column="1" 
+                     VerticalContentAlignment="Center"/>
+        </Grid>
+
+        <!-- Кнопки -->
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="5" Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right" 
+                    VerticalAlignment="Bottom"
+                    Margin="0,10">
+            <Button Content="OK" Width="85" Height="35" Margin="0,0,10,0" 
+                    Command="{Binding OkCommand}" MinWidth="80"/>
+            <Button Content="Отмена" Width="85" Height="35" 
+                    Command="{Binding CancelCommand}" MinWidth="80"/>
+        </StackPanel>
+    </Grid>
+</Window>
