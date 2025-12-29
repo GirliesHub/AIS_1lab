@@ -3,68 +3,76 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Model;
+using System.Data;
+using System.Data.Common;
+using static Dapper.SqlMapper;
 
 namespace DataAccessLayer
 {
     public class DapperRepository<T> : IRepository<T> where T : class, IDomainObject
     {
-        private readonly string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\lonit\\Source\\Repos\\AIS_1lab\\DataAccessLayer\\LibraryDB.mdf\";Integrated Security=True";
-           
+        private readonly IDbConnection _connection;
+        private readonly IDbTransaction? _transaction;
+        private readonly string _tableName;
 
-        private string Table => typeof(T).Name + "s";
+        // Конструктор для обычного использования (без транзакции)
+        public DapperRepository(string connectionString)
+        {
+            _connection = new SqlConnection(connectionString);
+            _transaction = null;
+            _tableName = typeof(T).Name + "s";
+        }
+
+        // Конструктор для UnitOfWork (с транзакцией)
+        public DapperRepository(IDbConnection connection, IDbTransaction? transaction = null)
+        {
+            _connection = connection;
+            _transaction = transaction;
+            _tableName = typeof(T).Name + "s";
+        }
 
         public IEnumerable<T> GetAll()
         {
-            using var conn = new SqlConnection(_connectionString);
-            return conn.Query<T>($"SELECT * FROM {Table}");
+            return _connection.Query<T>($"SELECT * FROM {_tableName}", transaction: _transaction);
         }
 
-        public T Get(int id)
+        public T? Get(int id)
         {
-            using var conn = new SqlConnection(_connectionString);
-            return conn.QuerySingleOrDefault<T>(
-                $"SELECT * FROM {Table} WHERE ID=@ID",
-                new { ID = id });
+            return _connection.QuerySingleOrDefault<T>(
+                $"SELECT * FROM {_tableName} WHERE ID = @ID",
+                new { ID = id },
+                transaction: _transaction);
         }
 
         public void Create(T entity)
         {
-            using var conn = new SqlConnection(_connectionString);
+            var properties = typeof(T).GetProperties()
+                .Where(p => p.Name != "ID" && p.CanRead && p.CanWrite);
 
-            var props = typeof(T).GetProperties().Where(p => p.Name != "ID");
+            var columns = string.Join(",", properties.Select(p => p.Name));
+            var parameters = string.Join(",", properties.Select(p => "@" + p.Name));
 
-            string columns = string.Join(",", props.Select(x => x.Name));
-            string values = string.Join(",", props.Select(x => "@" + x.Name));
+            var sql = $"INSERT INTO {_tableName} ({columns}) VALUES ({parameters}); SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            string sql = $@"
-                INSERT INTO {Table} ({columns})
-                VALUES ({values});
-                SELECT CAST(SCOPE_IDENTITY() as int);
-            ";
-
-            entity.ID = conn.QuerySingle<int>(sql, entity);
+            entity.ID = _connection.QuerySingle<int>(sql, entity, transaction: _transaction);
         }
 
         public void Update(T entity)
         {
-            using var conn = new SqlConnection(_connectionString);
+            var properties = typeof(T).GetProperties()
+                .Where(p => p.Name != "ID" && p.CanRead && p.CanWrite);
 
-            var props = typeof(T).GetProperties().Where(p => p.Name != "ID");
-            string setClause = string.Join(",", props.Select(x => $"{x.Name}=@{x.Name}"));
+            var setClause = string.Join(",", properties.Select(p => p.Name + " = @" + p.Name));
+            var sql = $"UPDATE {_tableName} SET {setClause} WHERE ID = @ID";
 
-            string sql = $@"
-                UPDATE {Table}
-                SET {setClause}
-                WHERE ID=@ID
-            ";
-
-            conn.Execute(sql, entity);
+            _connection.Execute(sql, entity, transaction: _transaction);
         }
 
         public void Remove(int id)
         {
-            using var conn = new SqlConnection(_connectionString);
-            conn.Execute($"DELETE FROM {Table} WHERE ID=@ID", new { ID = id });
+            _connection.Execute($"DELETE FROM {_tableName} WHERE ID = @ID",
+                new { ID = id },
+                transaction: _transaction);
         }
     }
 }

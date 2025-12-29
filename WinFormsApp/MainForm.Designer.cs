@@ -49,13 +49,20 @@ namespace WinFormsApp
             btnApplyPriceFilter = new Button();
             btnClearFilters = new Button();
             labelFilter = new Label();
+            listViewCollectors = new ListView();
+            btnAddCollector = new Button();
+            btnAssignLabubu = new Button();
+            btnShowCollectorLabubus = new Button();
+            label5 = new Label();
+            label6 = new Label();
+            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)numericMinPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericMaxPrice).BeginInit();
             SuspendLayout();
             // 
             // btnAddLabubu
             // 
-            btnAddLabubu.Location = new Point(619, 153);
+            btnAddLabubu.Location = new Point(521, 150);
             btnAddLabubu.Name = "btnAddLabubu";
             btnAddLabubu.Size = new Size(119, 23);
             btnAddLabubu.TabIndex = 0;
@@ -65,7 +72,7 @@ namespace WinFormsApp
             // 
             // btnRemoveLabubu
             // 
-            btnRemoveLabubu.Location = new Point(619, 195);
+            btnRemoveLabubu.Location = new Point(521, 192);
             btnRemoveLabubu.Name = "btnRemoveLabubu";
             btnRemoveLabubu.Size = new Size(119, 23);
             btnRemoveLabubu.TabIndex = 1;
@@ -75,7 +82,7 @@ namespace WinFormsApp
             // 
             // btnUpdateLabubu
             // 
-            btnUpdateLabubu.Location = new Point(619, 237);
+            btnUpdateLabubu.Location = new Point(521, 234);
             btnUpdateLabubu.Name = "btnUpdateLabubu";
             btnUpdateLabubu.Size = new Size(119, 23);
             btnUpdateLabubu.TabIndex = 2;
@@ -88,7 +95,7 @@ namespace WinFormsApp
             listViewLabubus.BackColor = SystemColors.Window;
             listViewLabubus.Location = new Point(12, 132);
             listViewLabubus.Name = "listViewLabubus";
-            listViewLabubus.Size = new Size(535, 154);
+            listViewLabubus.Size = new Size(503, 154);
             listViewLabubus.TabIndex = 3;
             listViewLabubus.UseCompatibleStateImageBehavior = false;
             listViewLabubus.SelectedIndexChanged += listViewLabubus_SelectedIndexChanged;
@@ -178,7 +185,7 @@ namespace WinFormsApp
             label4.BackColor = SystemColors.Window;
             label4.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label4.ForeColor = Color.FromArgb(255, 128, 128);
-            label4.Location = new Point(101, 99);
+            label4.Location = new Point(12, 99);
             label4.Name = "label4";
             label4.Size = new Size(359, 30);
             label4.TabIndex = 13;
@@ -229,11 +236,81 @@ namespace WinFormsApp
             labelFilter.TabIndex = 18;
             labelFilter.Text = "Фильтрация по цене";
             // 
+            // listViewCollectors
+            // 
+            listViewCollectors.BackColor = SystemColors.Window;
+            listViewCollectors.Location = new Point(670, 132);
+            listViewCollectors.Name = "listViewCollectors";
+            listViewCollectors.Size = new Size(358, 154);
+            listViewCollectors.TabIndex = 19;
+            listViewCollectors.UseCompatibleStateImageBehavior = false;
+            // 
+            // btnAddCollector
+            // 
+            btnAddCollector.Location = new Point(656, 336);
+            btnAddCollector.Name = "btnAddCollector";
+            btnAddCollector.Size = new Size(163, 45);
+            btnAddCollector.TabIndex = 20;
+            btnAddCollector.Text = "Добавить коллекционера";
+            btnAddCollector.UseVisualStyleBackColor = true;
+            // 
+            // btnAssignLabubu
+            // 
+            btnAssignLabubu.Location = new Point(656, 422);
+            btnAssignLabubu.Name = "btnAssignLabubu";
+            btnAssignLabubu.Size = new Size(178, 23);
+            btnAssignLabubu.TabIndex = 21;
+            btnAssignLabubu.Text = "Назначить лабубу";
+            btnAssignLabubu.UseVisualStyleBackColor = true;
+            // 
+            // btnShowCollectorLabubus
+            // 
+            btnShowCollectorLabubus.Location = new Point(862, 353);
+            btnShowCollectorLabubus.Name = "btnShowCollectorLabubus";
+            btnShowCollectorLabubus.Size = new Size(166, 23);
+            btnShowCollectorLabubus.TabIndex = 22;
+            btnShowCollectorLabubus.Text = "Показать лабубу";
+            btnShowCollectorLabubus.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(656, 318);
+            label5.Name = "label5";
+            label5.Size = new Size(163, 15);
+            label5.TabIndex = 23;
+            label5.Text = "Добавление коллекционера";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(656, 389);
+            label6.Name = "label6";
+            label6.Size = new Size(178, 30);
+            label6.TabIndex = 24;
+            label6.Text = "Назначить выбранную лабубу \r\nвыбранному коллекционеру";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(862, 320);
+            label7.Name = "label7";
+            label7.Size = new Size(166, 30);
+            label7.TabIndex = 25;
+            label7.Text = "Показать лабубу \r\nконкретного коллекционера";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1037, 450);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(btnShowCollectorLabubus);
+            Controls.Add(btnAssignLabubu);
+            Controls.Add(btnAddCollector);
+            Controls.Add(listViewCollectors);
             Controls.Add(labelFilter);
             Controls.Add(btnClearFilters);
             Controls.Add(btnApplyPriceFilter);
@@ -284,5 +361,12 @@ namespace WinFormsApp
         private Button btnApplyPriceFilter;
         private Button btnClearFilters;
         private Label labelFilter;
+        private ListView listViewCollectors;
+        private Button btnAddCollector;
+        private Button btnAssignLabubu;
+        private Button btnShowCollectorLabubus;
+        private Label label5;
+        private Label label6;
+        private Label label7;
     }
 }

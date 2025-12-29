@@ -18,6 +18,9 @@ namespace WinFormsApp
             RefreshLabubuList();
             SetFormBackground();
 
+            InitializeCollectorsList();
+            RefreshCollectorsList();
+
             this.btnAddLabubu.Click += btnAddLabubu_Click;
             this.btnReset.Click += BtnSearch_Click;
             this.txtSearch.TextChanged += TxtSearch_TextChanged;
@@ -28,7 +31,36 @@ namespace WinFormsApp
             this.btnApplyPriceFilter.Click += BtnApplyPriceFilter_Click;
             this.btnClearFilters.Click += BtnClearFilters_Click;
 
+            this.btnAddCollector.Click += btnAddCollector_Click;
+            this.btnAssignLabubu.Click += btnAssignLabubu_Click;
+            this.btnShowCollectorLabubus.Click += btnShowCollectorLabubus_Click;
+
             this.listViewLabubus.SelectedIndexChanged += listViewLabubus_SelectedIndexChanged;
+        }
+
+
+        private void InitializeCollectorsList()
+        {
+            listViewCollectors.View = View.Details;
+            listViewCollectors.FullRowSelect = true;
+            listViewCollectors.GridLines = true;
+            listViewCollectors.Columns.Clear();
+            listViewCollectors.Columns.Add("ID", 50);
+            listViewCollectors.Columns.Add("Имя", 120);
+            listViewCollectors.Columns.Add("Город", 120);
+        }
+
+        private void RefreshCollectorsList()
+        {
+            listViewCollectors.Items.Clear();
+            var collectors = _logic.GetAllCollectors();
+            foreach (var c in collectors)
+            {
+                var item = new ListViewItem(c.ID.ToString());
+                item.SubItems.Add(c.Name);
+                item.SubItems.Add(c.City);
+                listViewCollectors.Items.Add(item);
+            }
         }
 
         /// <summary>
@@ -190,7 +222,7 @@ namespace WinFormsApp
                 item.SubItems.Add(labubu.Color ?? "");
                 string rarityDisplay = $"{(int)labubu.Rarity}";
                 item.SubItems.Add(rarityDisplay);
-                item.SubItems.Add(labubu.Price.ToString("N2") + " руб.");
+                item.SubItems.Add(labubu.Price.ToString("N2") + " $.");
                 item.SubItems.Add(labubu.Size.ToString());
                 listViewLabubus.Items.Add(item);
             }
@@ -383,7 +415,7 @@ namespace WinFormsApp
         {
             try
             {
-                this.BackgroundImage = Image.FromFile(@"C:\Users\lonit\source\repos\GirliesHub\AIS_1lab\labubu_background.jpg");
+                this.BackgroundImage = Image.FromFile(@"C:\Users\lonit\source\repos\AIS_1lab\labubu_background.jpg");
                 this.BackgroundImageLayout = ImageLayout.Stretch;
             }
             catch
@@ -408,7 +440,6 @@ namespace WinFormsApp
                 return;
             }
 
-            // Лучше фильтровать через BLL, а не прямо в форме:
             var filtered = _logic.GetLabubusByPriceRange(min, max);
             DisplayLabubuList(filtered);
         }
@@ -420,6 +451,80 @@ namespace WinFormsApp
 
             txtSearch.Clear();
             RefreshLabubuList();
+        }
+
+        private void btnAddCollector_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var form = new AddCollectorForm(_logic);
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    RefreshCollectorsList();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnAssignLabubu_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listViewLabubus.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Выберите лабубу в списке");
+                    return;
+                }
+                if (listViewCollectors.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Выберите коллекционера");
+                    return;
+                }
+
+                int labubuId = int.Parse(listViewLabubus.SelectedItems[0].Text);
+                int collectorId = int.Parse(listViewCollectors.SelectedItems[0].Text);
+
+                _logic.AssignLabubuToCollector(labubuId, collectorId);
+                MessageBox.Show("Лабуба назначена коллекционеру (UnitOfWork)");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnShowCollectorLabubus_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listViewCollectors.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Выберите коллекционера");
+                    return;
+                }
+
+                int collectorId = int.Parse(listViewCollectors.SelectedItems[0].Text);
+                var labubus = _logic.GetLabubusByCollector(collectorId);
+
+                listViewLabubus.Items.Clear();
+                foreach (var labubu in labubus)
+                {
+                    var item = new ListViewItem(labubu.ID.ToString());
+                    item.SubItems.Add(labubu.Name);
+                    item.SubItems.Add(labubu.Color);
+                    item.SubItems.Add(((int)labubu.Rarity).ToString());
+                    item.SubItems.Add(labubu.Size.ToString());
+                    item.SubItems.Add(labubu.Price.ToString("F2"));
+                    listViewLabubus.Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
     }

@@ -18,15 +18,29 @@ namespace ConsoleApp
         static Logic _logic;
         static void Main(string[] args)
         {
+
             NinjectService.Initialize();
             _logic = NinjectService.Get<Logic>();
+
 
             bool exit = false;
             while (!exit)
             {
                 Console.Clear();
-                Console.WriteLine("Добро пожаловать в Мир Лабуб! Что вы хотите сделать?");
-                Console.WriteLine("1. Добавить лабубу \n 2. Удалить лабубу \n 3. Изменить лабубу \n 4. Сгруппировать лабуб по признаку \n 5. Показать список всех лабуб \n 6. Найти самую дорогую/дешевую лабубу \n 7. Показать лабуб по диапазону цен \n 0. Выход");
+                Console.WriteLine("Добро пожаловать в Мир Лабуб! Что вы хотите сделать? (господипомоги)");
+                Console.WriteLine("1. Добавить лабубу " +
+                    "\n 2. Удалить лабубу " +
+                    "\n 3. Изменить лабубу " +
+                    "\n 4. Сгруппировать лабуб по признаку " +
+                    "\n 5. Показать список всех лабуб " +
+                    "\n 6. Найти самую дорогую/дешевую лабубу " +
+                    "\n 7. Показать лабуб по диапазону цен " +
+                    "\n-------п-----у-----п-----у-----п-----у-------" +
+                    "\n 8. Добавить коллекционера" +
+                    "\n 9. Показать всех коллекционеров" +
+                    "\n 10. Назначить лабубу коллекционеру" +
+                    "\n 11. Статистика коллекционеров" +
+                    "\n 0. Выход");
                 Console.WriteLine("Выберите номер: ");
                 string number = Console.ReadLine();
                 switch (number)
@@ -59,6 +73,22 @@ namespace ConsoleApp
                         Console.Clear();
                         ShowLabubusByPriceRange();
                         break;
+                    case "8":
+                        Console.Clear(); 
+                        AddCollector(); 
+                        break;
+                    case "9": 
+                        Console.Clear(); 
+                        GetAllCollectors(); 
+                        break;
+                    case "10": 
+                        Console.Clear(); 
+                        AssignLabubuToCollector(); 
+                        break;
+                    case "11": 
+                        Console.Clear(); 
+                        ShowCollectorStats(); 
+                        break;
                     case "0":
                         Console.Clear();
                         Console.WriteLine("Спасибо, что затестили Мир Лабуб! До скорого!");
@@ -73,6 +103,8 @@ namespace ConsoleApp
                 }
                 Console.ReadKey();
             }
+
+
             /// <summary>
             /// Функция для добавления лабубы через консоль
             /// </summary>>
@@ -264,11 +296,11 @@ namespace ConsoleApp
                     {
                         case "1":
                             var cheapestLabubu = _logic.FindMostLeastExpensiveLabubu(false);
-                            Console.WriteLine($"Самая дешевая лабуба: {cheapestLabubu.Name} - {cheapestLabubu.Price} руб.");
+                            Console.WriteLine($"Самая дешевая лабуба: {cheapestLabubu.Name} - {cheapestLabubu.Price} $.");
                             break;
                         case "2":
                             var mostExpensiveLabubu = _logic.FindMostLeastExpensiveLabubu(true);
-                            Console.WriteLine($"Самая дорогая лабуба: {mostExpensiveLabubu.Name} - {mostExpensiveLabubu.Price} руб.");
+                            Console.WriteLine($"Самая дорогая лабуба: {mostExpensiveLabubu.Name} - {mostExpensiveLabubu.Price} $.");
                             break;
                         default:
                             Console.WriteLine("Неверный выбор");
@@ -327,6 +359,110 @@ namespace ConsoleApp
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+            }
+
+            static void AddCollector()
+            {
+                try
+                {
+                    Console.WriteLine("Добавление коллекционера");
+                    Console.Write("Введите имя: ");
+                    string name = Console.ReadLine()?.Trim();
+                    Console.Write("Введите город: ");
+                    string city = Console.ReadLine()?.Trim();
+
+                    if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(city))
+                    {
+                        Console.WriteLine("Имя и город не могут быть пустыми!");
+                        return;
+                    }
+
+                    _logic.AddCollector(name, city);
+                    Console.WriteLine($"Коллекционер '{name}' ({city}) добавлен!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+            }
+
+            static void GetAllCollectors()
+            {
+                try
+                {
+                    Console.WriteLine("Список всех коллекционеров:");
+                    var collectors = _logic.GetAllCollectors();
+
+                    if (collectors.Count == 0)
+                    {
+                        Console.WriteLine("Коллекционеров нет");
+                        return;
+                    }
+
+                    foreach (var collector in collectors)
+                    {
+                        var labubuCount = _logic.GetLabubusByCollector(collector.ID).Count;
+                        Console.WriteLine($"ID: {collector.ID} | {collector.Name} ({collector.City}) | Лабубу: {labubuCount}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+            }
+
+            static void AssignLabubuToCollector()
+            {
+                try
+                {
+                    Console.WriteLine("Назначение лабубы коллекционеру");
+                    GetAllLabubus();
+                    Console.Write("ID лабубы: ");
+                    int labubuId = int.Parse(Console.ReadLine());
+
+                    GetAllCollectors();
+                    Console.Write("ID коллекционера: ");
+                    int collectorId = int.Parse(Console.ReadLine());
+
+                    _logic.AssignLabubuToCollector(labubuId, collectorId);
+                    Console.WriteLine("Лабуба назначена коллекционеру");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.Message}");
+                }
+            }
+
+            static void ShowCollectorStats()
+            {
+                try
+                {
+                    Console.WriteLine("Статистика коллекционеров:");
+                    Console.WriteLine("--------------------------");
+
+                    var collectors = _logic.GetAllCollectors();
+                    if (collectors.Count == 0)
+                    {
+                        Console.WriteLine("Коллекционеров нет");
+                        return;
+                    }
+
+                    foreach (var collector in collectors)
+                    {
+                        var labubus = _logic.GetLabubusByCollector(collector.ID);
+                        Console.WriteLine($"{collector.Name} ({collector.City}): {labubus.Count} лабубу");
+                        foreach (var labubu in labubus.Take(3))  // Первые 3
+                        {
+                            Console.WriteLine($"  - {labubu.Name} ({labubu.Price}$)");
+                        }
+                        if (labubus.Count > 3) Console.WriteLine($"  -... и еще {labubus.Count - 3}");
+                        Console.WriteLine();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Ошибка: {ex.Message}");
                 }
             }
 
@@ -502,6 +638,9 @@ namespace ConsoleApp
                 }
             }
         }
+
+        
+
     }
 
 }

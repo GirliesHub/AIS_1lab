@@ -10,9 +10,18 @@ namespace BusinessLogic
 {
     public class NinjectModule : Ninject.Modules.NinjectModule
     {
+        //public override void Load()
+        //{
+        //    Bind<IRepository<Labubu>>().To<EntityRepository<Labubu>>().InSingletonScope();
+        //    Bind<Logic>().ToSelf();
+        //}
         public override void Load()
         {
-            Bind<IRepository<Labubu>>().To<EntityRepository<Labubu>>().InSingletonScope();
+            // Выберите EF или Dapper
+            //Bind<IUnitOfWork>().To<DapperUnitOfWork>().InTransientScope();
+            // Bind<IUnitOfWork>().To<EfUnitOfWork>().InTransientScope();
+            Bind<IUnitOfWork>().To<EfUnitOfWork>().InTransientScope();
+
             Bind<Logic>().ToSelf();
         }
     }

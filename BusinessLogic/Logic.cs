@@ -7,19 +7,18 @@ using System.Linq;
 namespace BusinessLogic
 {
     /// <summary>
-    /// Логика приложения для работы с Labubu
+    /// Логика приложения для работы с Labubu + UnitOfWork
     /// </summary>
     public class Logic
     {
-        private readonly IRepository<Labubu> _repository;
+        private readonly IUnitOfWork _unitOfWork;
 
         /// <summary>
-        /// Конструктор с внедрением зависимости (Dependency Injection)
+        /// Единственный конструктор с UnitOfWork
         /// </summary>
-        /// <param name="repository">Репозиторий для работы с данными</param>
-        public Logic(IRepository<Labubu> repository)
+        public Logic(IUnitOfWork unitOfWork)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         /// <summary>
@@ -32,11 +31,12 @@ namespace BusinessLogic
 
             if (labubu.ID <= 0)
             {
-                var allLabubus = _repository.GetAll().ToList();
+                var allLabubus = _unitOfWork.LabubuRepository.GetAll().ToList();
                 labubu.ID = allLabubus.Count > 0 ? allLabubus.Max(l => l.ID) + 1 : 1;
             }
 
-            _repository.Create(labubu);
+            _unitOfWork.LabubuRepository.Create(labubu);
+            _unitOfWork.Commit();
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace BusinessLogic
         /// </summary>
         public List<Labubu> GetAllLabubus()
         {
-            return _repository.GetAll().ToList();
+            return _unitOfWork.LabubuRepository.GetAll().ToList();
         }
 
         /// <summary>
@@ -52,7 +52,16 @@ namespace BusinessLogic
         /// </summary>
         public void RemoveLabubu(int id)
         {
-            _repository.Remove(id);
+            _unitOfWork.LabubuRepository.Remove(id);
+            _unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// Получает лабубу по ID
+        /// </summary>
+        public Labubu GetLabubuById(int id)
+        {
+            return _unitOfWork.LabubuRepository.Get(id);
         }
 
         /// <summary>
@@ -63,61 +72,17 @@ namespace BusinessLogic
             if (labubu == null)
                 throw new ArgumentNullException(nameof(labubu));
 
-            var existing = _repository.Get(labubu.ID);
+            var existing = _unitOfWork.LabubuRepository.Get(labubu.ID);
             if (existing == null)
                 throw new ArgumentException($"Лабуба с ID {labubu.ID} не найдена");
 
-            _repository.Update(labubu);
+            _unitOfWork.LabubuRepository.Update(labubu);
+            _unitOfWork.Commit();
         }
 
         /// <summary>
-        /// Группирует лабубы по критерию
+        /// Обновление лабубы по параметрам
         /// </summary>
-        public Dictionary<string, List<Labubu>> GroupLabubu(GroupByCriteria criteria)
-        {
-            var all = _repository.GetAll();
-            return criteria switch
-            {
-                GroupByCriteria.Rarity =>
-                    all.GroupBy(x => x.Rarity.ToString())
-                       .ToDictionary(g => g.Key, g => g.ToList()),
-                GroupByCriteria.Size =>
-                    all.GroupBy(x => x.Size.ToString())
-                       .ToDictionary(g => g.Key, g => g.ToList()),
-                _ => throw new ArgumentException("Unknown criteria")
-            };
-        }
-
-        /// <summary>
-        /// Находит самую дорогую или дешевую лабубу
-        /// </summary>
-        public Labubu FindMostLeastExpensiveLabubu(bool findMostExpensive)
-        {
-            var list = _repository.GetAll().ToList();
-            if (list.Count == 0)
-                throw new InvalidOperationException("Список пуст");
-
-            return findMostExpensive
-                ? list.OrderByDescending(x => x.Price).First()
-                : list.OrderBy(x => x.Price).First();
-        }
-
-        /// <summary>
-        /// Получает лабубу по ID
-        /// </summary>
-        public Labubu GetLabubuById(int id)
-        {
-            return _repository.Get(id);
-        }
-        /// <summary>
-        /// Метод обновления лабубу
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="color"></param>
-        /// <param name="rarity"></param>
-        /// <param name="size"></param>
-        /// <param name="price"></param>
         public void UpdateLabubu(int id, string name, string color, RarityEnum rarity, SizeEnum size, decimal price)
         {
             var labubu = new Labubu
@@ -129,24 +94,104 @@ namespace BusinessLogic
                 Size = size,
                 Price = price
             };
-
             UpdateLabubu(labubu);
         }
 
+        /// <summary>
+        /// Группирует лабубы по критерию
+        /// </summary>
+        public Dictionary<string, List<Labubu>> GroupLabubu(GroupByCriteria criteria)
+        {
+            var all = _unitOfWork.LabubuRepository.GetAll().ToList();
+            return criteria switch
+            {
+                GroupByCriteria.Rarity => all.GroupBy(x => x.Rarity.ToString())
+                    .ToDictionary(g => g.Key, g => g.ToList()),
+                GroupByCriteria.Size => all.GroupBy(x => x.Size.ToString())
+                    .ToDictionary(g => g.Key, g => g.ToList()),
+                _ => throw new ArgumentException("Неизвестный критерий")
+            };
+        }
+
+        /// <summary>
+        /// Находит самую дорогую или дешевую лабубу
+        /// </summary>
+        public Labubu FindMostLeastExpensiveLabubu(bool findMostExpensive)
+        {
+            var list = _unitOfWork.LabubuRepository.GetAll().ToList();
+            if (list.Count == 0)
+                throw new InvalidOperationException("Список пуст");
+
+            return findMostExpensive
+                ? list.OrderByDescending(x => x.Price).First()
+                : list.OrderBy(x => x.Price).First();
+        }
+
+        /// <summary>
+        /// Фильтр по диапазону цен
+        /// </summary>
         public List<Labubu> GetLabubusByPriceRange(decimal minPrice, decimal maxPrice)
         {
             if (minPrice < 0 || maxPrice < 0)
                 throw new ArgumentException("Цена не может быть отрицательной.");
-
             if (minPrice > maxPrice)
                 throw new ArgumentException("MinPrice не может быть больше MaxPrice.");
 
-            return _repository
-                .GetAll()
+            return _unitOfWork.LabubuRepository.GetAll()
                 .Where(x => x.Price >= minPrice && x.Price <= maxPrice)
                 .ToList();
         }
 
+        public List<Collector> GetAllCollectors()
+        {
+            return _unitOfWork.CollectorRepository.GetAll().ToList();
+        }
+
+        public List<Labubu> GetLabubusByCollector(int collectorId)
+        {
+            return _unitOfWork.LabubuCollectorRepository.GetLabubusByCollector(collectorId);
+        }
+
+        public void CreateLabubuWithOwner(Labubu labubu, Collector collector)
+        {
+            _unitOfWork.CollectorRepository.Create(collector);
+            _unitOfWork.LabubuRepository.Create(labubu);
+            _unitOfWork.LabubuCollectorRepository.AssignLabubuToCollector(labubu.ID, collector.ID);
+            _unitOfWork.Commit();  // 3 таблицы атомарно!
+        }
+
+        public void AddCollector(string name, string city)
+        {
+            var collector = new Collector { Name = name, City = city };
+            _unitOfWork.CollectorRepository.Create(collector);
+            _unitOfWork.Commit();
+        }
+
+        public void AssignLabubuToCollector(int labubuId, int collectorId)
+        {
+            _unitOfWork.LabubuCollectorRepository.AssignLabubuToCollector(labubuId, collectorId);
+            _unitOfWork.Commit();
+        }
+
+        //для теста бд было
+        public void CreateTestCollectors()
+        {
+            _unitOfWork.CollectorRepository.Create(new Collector { Name = "Иван", City = "Москва" });
+            _unitOfWork.CollectorRepository.Create(new Collector { Name = "Мария", City = "СПб" }); 
+            _unitOfWork.Commit();
+        }
+
+        public void AddTestLabubu()
+        {
+         var labubu = new Labubu
+         {
+             Name = "Pink Monster",
+             Color = "Розовый",
+             Rarity = RarityEnum.FiveStars,
+             Size = SizeEnum.HUGE,
+             Price = 999};
+             AddLabubu(labubu);
+        }
     }
 
 }

@@ -18,6 +18,9 @@ namespace Model
         }
         [Column("Size")]
         public string SizeInternal { get; set; }
+        [Column("CollectorId")]
+        public int? CollectorId { get; set; }
+        public Collector? Collector { get; set; }
 
         public Labubu() { }
         public Labubu(int id, string name, string color, RarityEnum rarity, SizeEnum size, decimal price)
