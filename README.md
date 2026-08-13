@@ -1,60 +1,48 @@
-# AIS_1lab - C#/.NET Academic Project
+# AIS_1lab
 
-Учебный командный проект по разработке приложения
-с разделением на модель, бизнес-логику и слой доступа к данным.
+Academic team project developed as part of a C#/.NET university course.
 
-> Проект выполнен в рамках университетских лабораторных работ.
-> Он отражает учебный этап разработки и не претендует
-> на production-ready архитектуру.
+## Overview
 
-## Stack
+The project is a desktop application built with a layered architecture,
+separating domain models, business logic and data access.
+
+## Tech Stack
 
 - C#
 - .NET 8
 - Entity Framework 6
 - Dapper
-- Microsoft SQL Server / LocalDB
+- SQL Server / LocalDB
 - Ninject
 - Git
 
 ## Architecture
 
-Проект разделён на несколько компонентов:
+- `Model` - domain models and interfaces
+- `BusinessLogic` - business logic and dependency configuration
+- `DataAccessLayer` - repositories and database access
+- `ConsoleApp` - application entry point
 
-- `Model` - доменные модели и интерфейсы;
-- `DataAccessLayer` - доступ к данным и репозитории;
-- `BusinessLogic` - бизнес-логика и настройка Dependency Injection;
-- `ConsoleApp` - консольный интерфейс приложения.
+The Data Access Layer contains implementations using both
+Entity Framework and Dapper.
 
-В Data Access Layer реализованы варианты работы с данными
-через Entity Framework и Dapper.
+Dependency Injection is configured with Ninject.
 
-Для связывания зависимостей используется
-Dependency Injection через Ninject.
+## What I Practiced
 
-## What We Practiced
+- Layered application architecture
+- Repository pattern
+- Entity Framework
+- Dapper
+- SQL and CRUD operations
+- Dependency Injection
+- Git-based team development
 
-- разделение приложения на слои;
-- Repository pattern;
-- абстракция доступа к данным;
-- Entity Framework;
-- Dapper;
-- CRUD-операции и SQL;
-- Dependency Injection;
-- Git в командной разработке;
-- изменение архитектуры и паттернов между лабораторными работами.
+## Project Status
 
-## Status
+Educational project completed as part of university coursework.
 
-Учебный проект завершён в рамках курса.
-
-Репозиторий сохранён как пример практики C#/.NET,
-работы с базами данных и командной разработки.
-
-## Note
-
-Проект содержит решения, характерные для учебной работы,
-включая упрощённую конфигурацию и архитектурные компромиссы.
-
-При повторной реализации часть решений была бы пересмотрена
-с учётом современных практик .NET.
+This project represents an early stage of my C#/.NET development
+and contains architectural decisions that I would approach differently
+with current knowledge.
